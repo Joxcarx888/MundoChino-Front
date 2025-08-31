@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Ancizar+Sans:wght@400;700&display=swap');
+
+* {
+  font-family: "Ancizar Sans", sans-serif;
+}
+
+.auth-page {
+  width: 100%;
+  height: 100vh;
+  background: url('../../assets/img/Fondo.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.auth-container {
+  width: 400px;
+  border-radius: 15px;
+  background-color: #ffd900c7;
+  border: 2px solid #a18a03;
+}
+
+.auth-logo img {
+  width: 180px;
+  object-fit: contain;
+}
+
+.auth-title {
+  font-weight: 700;
+  color: #000;
+}
+
+.auth-input .input-group-text {
+  background-color: #F7F5F0;
+  border: 1px solid #8a7e3f;
+}
+
+.auth-input input {
+  border: 1px solid #8a7e3f;
+}
+
+.toggle-password img {
+  width: 20px;
+  cursor: pointer;
+}
+
+.auth-button {
+  background: #000;
+  color: #FFD700;
+  font-weight: 700;
+  border-radius: 10px;
+  transition: 0.3s ease-in-out;
+}
+
+.auth-button:hover {
+  background: #FFD700;
+  color: #000;
+  border: 1px solid #FFD700;
+}
+
+.auth-link {
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.auth-link:hover {
+  color: #008080;
+  text-decoration: underline;
+}
+
+.auth-error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: -10px;
+  margin-bottom: 10px;
+}
+
+.auth-input .input-group-text img,
+.toggle-password img {
+  width: 20px;      /* Tamaño fijo */
+  height: 20px;     /* Mantener proporción */
+  object-fit: contain;
+}
+
+.toggle-password {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem; /* igual al padding de input-group-text */
+}
+

@@ -1,0 +1,45 @@
+/* Fondo y sombra */
+.custom-navbar {
+  background-color: #ffffff !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding-top: 0.25rem !important;   /* compactamos */
+  padding-bottom: 0.25rem !important;
+}
+
+/* Logo */
+.custom-navbar .logo {
+  height: 36px;   /* más compacto */
+  margin-right: 10px;
+}
+
+/* Texto de la marca */
+.custom-navbar .brand {
+  font-family: "Amarante", cursive;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b !important; /* gris oscuro */
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+/* Links del menú */
+.custom-navbar .nav-link {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  color: #374151 !important; /* gris medio */
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.custom-navbar .nav-link:hover {
+  color: #0d6efd !important; /* azul bootstrap */
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .custom-navbar .brand {
+    font-size: 1.2rem;
+  }
+}

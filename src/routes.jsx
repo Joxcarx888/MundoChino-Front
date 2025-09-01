@@ -1,6 +1,8 @@
 import { Navigate } from "react-router-dom";
 import { DashboardPage } from "./pages/dashboard";
 import { ProvidersPage } from "./pages/providers";
+import { InvoicesPage } from "./pages/invoices";
+import { ProductsPage } from "./pages/products";
 import { Auth } from "./pages/auth/auth";
 import { PrivateRoute } from "./components/PrivateRoute";
 
@@ -18,6 +20,10 @@ const routes = [
   },
 
   { path: '/providers', element: <ProvidersPage /> },
+
+  { path: '/invoices', element: <InvoicesPage /> },
+
+  { path: '/products', element: <ProductsPage /> },
 
   { path: '*', element: <Navigate to="/dashboard" /> }
 ];

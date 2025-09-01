@@ -18,6 +18,7 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// =================== AUTH ===================
 export const login = async (data) => {
   try {
     return await apiClient.post("auth/login", data);
@@ -34,53 +35,146 @@ export const register = async (data) => {
   }
 };
 
-
+// =================== PROVIDERS ===================
 export const getProviders = async () => {
   try {
     const res = await apiClient.get("provider/");
     return res.data;
-  } catch (error) {
-    return { error: true, error };
+  } catch (e) {
+    return { error: true, e };
   }
 };
 
-// ✅ Crear proveedor
 export const createProvider = async (data) => {
   try {
     const res = await apiClient.post("provider/", data);
     return res.data;
-  } catch (error) {
-    return { error: true, error };
+  } catch (e) {
+    return { error: true, e };
   }
 };
 
-// ✅ Editar proveedor
 export const updateProvider = async (id, data) => {
   try {
     const res = await apiClient.put(`provider/${id}`, data);
     return res.data;
-  } catch (error) {
-    return { error: true, error };
+  } catch (e) {
+    return { error: true, e };
   }
 };
 
-// ✅ Eliminar proveedor (soft delete)
 export const deleteProvider = async (id) => {
   try {
     const res = await apiClient.delete(`provider/${id}`);
     return res.data;
-  } catch (error) {
-    return { error: true, error };
+  } catch (e) {
+    return { error: true, e };
   }
 };
 
-// ✅ Eliminar proveedor permanentemente (hard delete)
 export const hardDeleteProvider = async (id) => {
   try {
     const res = await apiClient.delete(`provider/hard/${id}`);
     return res.data;
-  } catch (error) {
-    return { error: true, error };
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+// =================== INVOICES ===================
+export const getInvoices = async () => {
+  try {
+    const res = await apiClient.get("invoice/");
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const createInvoice = async (data) => {
+  try {
+    const res = await apiClient.post("invoice/", data);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const updateInvoice = async (id, data) => {
+  try {
+    const res = await apiClient.put(`invoice/${id}`, data);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const deleteInvoice = async (id) => {
+  try {
+    const res = await apiClient.delete(`invoice/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const hardDeleteInvoice = async (id) => {
+  try {
+    const res = await apiClient.delete(`invoice/hard/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+// =================== PRODUCTS ===================
+export const getProducts = async () => {
+  try {
+    const res = await apiClient.get("product/");
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+
+export const createProduct = async (formData) => {
+  try {
+    const res = await apiClient.post("product/", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const updateProduct = async (id, formData) => {
+  try {
+    const res = await apiClient.put(`product/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const deleteProduct = async (id) => {
+  try {
+    const res = await apiClient.delete(`product/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const hardDeleteProduct = async (id) => {
+  try {
+    const res = await apiClient.delete(`product/hard/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
   }
 };
 

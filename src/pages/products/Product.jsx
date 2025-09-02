@@ -34,12 +34,14 @@ export const ProductsPage = () => {
     nombreArticulo: "",
     descripcion: "",
     proveedor: "",
-    unidad: "",
+    unidad: "UNIDAD",
     cantidad: 0,
     costoUnitario: 0,
     valorInventario: 0,
     valorConIvaSugerido: 0,
     valorReal: 0,
+    porcentajeGanancia: 75,
+    paqueteCantidad: "",
     imagenes: [],
   });
 
@@ -60,16 +62,17 @@ export const ProductsPage = () => {
   useEffect(() => {
     const cantidad = Number(formData.cantidad) || 0;
     const costo = Number(formData.costoUnitario) || 0;
+    const ganancia = Number(formData.porcentajeGanancia) || 0;
 
     const valorInventario = cantidad * costo;
-    const valorConIvaSugerido = costo * (1 + 1.75) * (1.12);
+    const valorConIvaSugerido = costo * (1 + ganancia / 100) * 1.12;
 
     setFormData((prev) => ({
       ...prev,
       valorInventario,
       valorConIvaSugerido,
     }));
-  }, [formData.cantidad, formData.costoUnitario]);
+  }, [formData.cantidad, formData.costoUnitario, formData.porcentajeGanancia]);
 
   // Abrir modal (nuevo o editar)
   const handleOpenModal = (product = null) => {
@@ -80,12 +83,16 @@ export const ProductsPage = () => {
         nombreArticulo: product.nombreArticulo || "",
         descripcion: product.descripcion || "",
         proveedor: product.proveedor?._id || product.proveedor || "",
-        unidad: product.unidad || "",
+        unidad: product.unidad || "UNIDAD",
         cantidad: Number(product.cantidad ?? 0),
         costoUnitario: Number(product.costoUnitario ?? 0),
         valorInventario: Number(product.valorInventario ?? 0),
         valorConIvaSugerido: Number(product.valorConIvaSugerido ?? 0),
         valorReal: Number(product.valorReal ?? 0),
+        porcentajeGanancia: 75,
+        paqueteCantidad: product.unidad?.includes("PAQUETE")
+          ? product.unidad.replace(/\D/g, "")
+          : "",
         imagenes: [],
       });
     } else {
@@ -94,12 +101,14 @@ export const ProductsPage = () => {
         nombreArticulo: "",
         descripcion: "",
         proveedor: "",
-        unidad: "",
+        unidad: "UNIDAD",
         cantidad: 0,
         costoUnitario: 0,
         valorInventario: 0,
         valorConIvaSugerido: 0,
         valorReal: 0,
+        porcentajeGanancia: 75,
+        paqueteCantidad: "",
         imagenes: [],
       });
     }
@@ -116,13 +125,18 @@ export const ProductsPage = () => {
     if (!formData.proveedor)
       return alert("Proveedor es requerido (combobox)");
 
+    // Construir campo unidad
+    let unidadFinal = formData.unidad;
+    if (formData.unidad === "PAQUETE" && formData.paqueteCantidad) {
+      unidadFinal = `PAQUETE de ${formData.paqueteCantidad} Unidades`;
+    }
+
     const fd = new FormData();
     const keys = [
       "sku",
       "nombreArticulo",
       "descripcion",
       "proveedor",
-      "unidad",
       "cantidad",
       "costoUnitario",
       "valorInventario",
@@ -130,6 +144,8 @@ export const ProductsPage = () => {
       "valorReal",
     ];
     keys.forEach((k) => fd.append(k, formData[k] ?? ""));
+
+    fd.append("unidad", unidadFinal);
 
     if (formData.imagenes && formData.imagenes.length > 0) {
       for (let i = 0; i < formData.imagenes.length; i++) {
@@ -169,12 +185,9 @@ export const ProductsPage = () => {
       <div id="products-page" className="px-4 py-6">
         <header className="header-row">
           <h1>Productos</h1>
-          <button className="btn-primary" onClick={() => handleOpenModal()}>
-            ➕ Agregar Producto
-          </button>
         </header>
 
-        {/* Filtros */}
+        {/* Filtros + Botón */}
         <div className="filters-row">
           <select
             value={filters.proveedor}
@@ -207,6 +220,10 @@ export const ProductsPage = () => {
               setFilters((f) => ({ ...f, serie: e.target.value }))
             }
           />
+
+          <button className="btn-primary" onClick={() => handleOpenModal()}>
+            ➕ Agregar Producto
+          </button>
         </div>
 
         {/* Tabla */}
@@ -344,13 +361,32 @@ export const ProductsPage = () => {
                 </select>
 
                 <label>Unidad</label>
-                <input
-                  type="text"
+                <select
                   value={formData.unidad}
                   onChange={(e) =>
                     setFormData((d) => ({ ...d, unidad: e.target.value }))
                   }
-                />
+                >
+                  <option value="UNIDAD">UNIDAD</option>
+                  <option value="PAQUETE">PAQUETE</option>
+                </select>
+
+                {formData.unidad === "PAQUETE" && (
+                  <>
+                    <label>Cantidad en Paquete</label>
+                    <input
+                      type="number"
+                      value={formData.paqueteCantidad}
+                      onChange={(e) =>
+                        setFormData((d) => ({
+                          ...d,
+                          paqueteCantidad: e.target.value,
+                        }))
+                      }
+                      min="1"
+                    />
+                  </>
+                )}
 
                 <label>Cantidad</label>
                 <input
@@ -373,6 +409,20 @@ export const ProductsPage = () => {
                     setFormData((d) => ({
                       ...d,
                       costoUnitario: Number(e.target.value),
+                    }))
+                  }
+                  min="0"
+                  step="0.01"
+                />
+
+                <label>% Ganancia</label>
+                <input
+                  type="number"
+                  value={formData.porcentajeGanancia}
+                  onChange={(e) =>
+                    setFormData((d) => ({
+                      ...d,
+                      porcentajeGanancia: Number(e.target.value),
                     }))
                   }
                   min="0"

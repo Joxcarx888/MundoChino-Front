@@ -178,4 +178,41 @@ export const hardDeleteProduct = async (id) => {
   }
 };
 
+export const getClients = async () => {
+  try {
+    const res = await apiClient.get("client/");
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const createClient = async (data) => {
+  try {
+    const res = await apiClient.post("client/", data);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const updateClient = async (id, data) => {
+  try {
+    const res = await apiClient.put(`client/${id}`, data);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const deleteClient = async (id) => {
+  try {
+    const res = await apiClient.delete(`client/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+
 export default apiClient;

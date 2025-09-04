@@ -40,7 +40,7 @@ export const ProductsPage = () => {
     valorInventario: 0,
     valorConIvaSugerido: 0,
     valorReal: 0,
-    porcentajeGanancia: 75,
+    porcentajeGanancia: 0,
     paqueteCantidad: "",
     imagenes: [],
   });
@@ -59,61 +59,98 @@ export const ProductsPage = () => {
   };
 
   // Auto-cálculos
-  useEffect(() => {
-    const cantidad = Number(formData.cantidad) || 0;
-    const costo = Number(formData.costoUnitario) || 0;
-    const ganancia = Number(formData.porcentajeGanancia) || 0;
+    useEffect(() => {
+  const cantidad = Number(formData.cantidad) || 0;
+  const costo = Number(formData.costoUnitario) || 0;
+  const ganancia = Number(formData.porcentajeGanancia) || 0; // en %
 
-    const valorInventario = cantidad * costo;
-    const valorConIvaSugerido = costo * (1 + ganancia / 100) * 1.12;
+  const valorInventario = cantidad * costo;
 
-    setFormData((prev) => ({
-      ...prev,
-      valorInventario,
-      valorConIvaSugerido,
-    }));
-  }, [formData.cantidad, formData.costoUnitario, formData.porcentajeGanancia]);
+  const valorConIvaSugerido =
+    costo > 0
+      ? costo * (1 + ganancia / 100) * (1 + 0.12)
+      : 0;
+
+  setFormData((prev) => ({
+    ...prev,
+    valorInventario,
+    valorConIvaSugerido,
+  }));
+}, [formData.cantidad, formData.costoUnitario, formData.porcentajeGanancia]);
+
+
+
 
   // Abrir modal (nuevo o editar)
   const handleOpenModal = (product = null) => {
     setEditingProduct(product);
     if (product) {
-      setFormData({
-        sku: product.sku || "",
-        nombreArticulo: product.nombreArticulo || "",
-        descripcion: product.descripcion || "",
-        proveedor: product.proveedor?._id || product.proveedor || "",
-        unidad: product.unidad || "UNIDAD",
-        cantidad: Number(product.cantidad ?? 0),
-        costoUnitario: Number(product.costoUnitario ?? 0),
-        valorInventario: Number(product.valorInventario ?? 0),
-        valorConIvaSugerido: Number(product.valorConIvaSugerido ?? 0),
-        valorReal: Number(product.valorReal ?? 0),
-        porcentajeGanancia: 75,
-        paqueteCantidad: product.unidad?.includes("PAQUETE")
-          ? product.unidad.replace(/\D/g, "")
-          : "",
-        imagenes: [],
-      });
+  // extraer cantidad del paquete si el producto tiene "PAQUETE de X Unidades"
+  let paqueteCantidad = "";
+  let unidad = "UNIDAD";
+  if (typeof product.unidad === "string") {
+    const match = product.unidad.match(/PAQUETE de (\d+)/);
+    if (match) {
+      paqueteCantidad = match[1];
+      unidad = "PAQUETE";
     } else {
-      setFormData({
-        sku: "",
-        nombreArticulo: "",
-        descripcion: "",
-        proveedor: "",
-        unidad: "UNIDAD",
-        cantidad: 0,
-        costoUnitario: 0,
-        valorInventario: 0,
-        valorConIvaSugerido: 0,
-        valorReal: 0,
-        porcentajeGanancia: 75,
-        paqueteCantidad: "",
-        imagenes: [],
-      });
+      unidad = "UNIDAD";
     }
-    setIsModalOpen(true);
-  };
+  }
+
+  // porcentajeGanancia: si viene del producto úsalo, si no usa 75 por defecto
+  // Despejar porcentajeGanancia desde valorConIvaSugerido si no existe
+const cantidad = Number(product.cantidad ?? 0);
+const costo = Number(product.costoUnitario ?? 0); // DECLARAR UNA SOLA VEZ
+const valorConIva = Number(product.valorConIvaSugerido ?? 0);
+
+let porcentajeGuardado = 0;
+if (costo > 0) {
+  porcentajeGuardado = ((valorConIva / (costo * 1.12)) - 1) * 100;
+}
+
+
+const valorInventario = cantidad * costo;
+const valorConIvaSugerido = costo + (costo * (porcentajeGuardado / 100)) + (costo * 0.12);
+
+
+  setFormData({
+    sku: product.sku || "",
+    nombreArticulo: product.nombreArticulo || "",
+    descripcion: product.descripcion || "",
+    proveedor: product.proveedor?._id || product.proveedor || "",
+    unidad,
+    cantidad,
+    costoUnitario: costo,
+    valorInventario,
+    valorConIvaSugerido,
+    valorReal: Number(product.valorReal ?? 0),
+    porcentajeGanancia: porcentajeGuardado,
+    paqueteCantidad,
+    imagenes: [],
+  });
+} else {
+    // Limpiar formulario para agregar nuevo producto
+    setFormData({
+      sku: "",
+      nombreArticulo: "",
+      descripcion: "",
+      proveedor: "",
+      unidad: "UNIDAD",
+      cantidad: 0,
+      costoUnitario: 0,
+      valorInventario: 0,
+      valorConIvaSugerido: 0,
+      valorReal: 0,
+      porcentajeGanancia: 0,
+      paqueteCantidad: "",
+      imagenes: [],
+    });
+  }
+
+  setIsModalOpen(true);
+};
+
 
   // Guardar producto
   const handleSubmit = async (e) => {
@@ -417,17 +454,17 @@ export const ProductsPage = () => {
 
                 <label>% Ganancia</label>
                 <input
-                  type="number"
-                  value={formData.porcentajeGanancia}
-                  onChange={(e) =>
-                    setFormData((d) => ({
-                      ...d,
-                      porcentajeGanancia: Number(e.target.value),
-                    }))
-                  }
-                  min="0"
-                  step="0.01"
-                />
+                    type="number"
+                    value={formData.porcentajeGanancia ?? 0}
+                    onChange={(e) =>
+                        setFormData((d) => ({
+                        ...d,
+                        porcentajeGanancia: Number(e.target.value),
+                        }))
+                    }
+                    min="0"
+                    step="0.01"
+                    />
 
                 <label>Valor Inventario</label>
                 <input

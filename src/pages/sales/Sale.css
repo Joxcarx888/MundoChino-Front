@@ -1,0 +1,75 @@
+/* Estilos solo para la página de ventas */
+.sales-page {
+  font-family: "Poppins", sans-serif;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Encabezado */
+.sales-page .sales-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.sales-page .sales-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Tabla de ventas */
+.sales-page .sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
+}
+
+.sales-page .sales-table th,
+.sales-page .sales-table td {
+  padding: 14px 18px;
+  text-align: left;
+}
+
+.sales-page .sales-table th {
+  background: #222;
+  color: #fff;
+  font-weight: 600;
+}
+
+.sales-page .sales-table tr:nth-child(even) {
+  background: #f5f5f5;
+}
+
+/* Botones */
+.sales-page .btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.sales-page .btn-add {
+  background: #28a745;
+  color: white;
+}
+
+.sales-page .btn-add:hover {
+  background: #1e7e34;
+}
+
+.sales-page .btn-delete {
+  background: #dc3545;
+  color: white;
+}
+
+.sales-page .btn-delete:hover {
+  background: #a71d2a;
+}

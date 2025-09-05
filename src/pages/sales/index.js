@@ -1,0 +1,1 @@
+export { SalesPage } from "./Sale.jsx";

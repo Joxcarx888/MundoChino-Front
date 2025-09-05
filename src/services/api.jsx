@@ -214,5 +214,52 @@ export const deleteClient = async (id) => {
   }
 };
 
+// =================== SALES ===================
+export const getSales = async () => {
+  try {
+    const res = await apiClient.get("sale/");
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const createSale = async (data) => {
+  try {
+    const res = await apiClient.post("sale/", data);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const updateSale = async (id, data) => {
+  try {
+    const res = await apiClient.put(`sale/${id}`, data);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const deleteSale = async (id) => {
+  try {
+    const res = await apiClient.delete(`sale/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+export const hardDeleteSale = async (id) => {
+  try {
+    const res = await apiClient.delete(`sale/hard/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+
 
 export default apiClient;

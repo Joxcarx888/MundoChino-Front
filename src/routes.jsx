@@ -4,6 +4,7 @@ import { ProvidersPage } from "./pages/providers";
 import { InvoicesPage } from "./pages/invoices";
 import { ProductsPage } from "./pages/products";
 import { ClientsPage } from "./pages/clients";
+import { SalesPage } from "./pages/sales";
 import { Auth } from "./pages/auth/auth";
 import { PrivateRoute } from "./components/PrivateRoute";
 
@@ -27,6 +28,8 @@ const routes = [
   { path: '/products', element: <ProductsPage /> },
 
   { path: '/clients', element: <ClientsPage /> },
+
+  { path: '/sales', element: <SalesPage /> },
 
   { path: '*', element: <Navigate to="/dashboard" /> }
 ];

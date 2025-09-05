@@ -23,10 +23,12 @@ const CustomNavbar = () => {
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ms-auto">
+            <Nav.Link onClick={() => navigate("/dashboard")}>Inicio</Nav.Link>
             <Nav.Link onClick={() => navigate("/products")}>Productos</Nav.Link>
             <Nav.Link onClick={() => navigate("/providers")}>Proveedores</Nav.Link>
             <Nav.Link onClick={() => navigate("/invoices")}>Facturas</Nav.Link>
             <Nav.Link onClick={() => navigate("/clients")}>Clientes</Nav.Link>
+            <Nav.Link onClick={() => navigate("/sales")}>Ventas</Nav.Link>
             <Nav.Link onClick={handleLogout}>Cerrar Sesión</Nav.Link>
           </Nav>
         </Navbar.Collapse>

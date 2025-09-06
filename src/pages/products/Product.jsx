@@ -81,55 +81,47 @@ export const ProductsPage = () => {
 
 
 
-  // Abrir modal (nuevo o editar)
-  const handleOpenModal = (product = null) => {
-    setEditingProduct(product);
-    if (product) {
-  // extraer cantidad del paquete si el producto tiene "PAQUETE de X Unidades"
-  let paqueteCantidad = "";
-  let unidad = "UNIDAD";
-  if (typeof product.unidad === "string") {
-    const match = product.unidad.match(/PAQUETE de (\d+)/);
-    if (match) {
-      paqueteCantidad = match[1];
-      unidad = "PAQUETE";
-    } else {
-      unidad = "UNIDAD";
+const handleOpenModal = (product = null) => {
+  setEditingProduct(product);
+
+  if (product) {
+    // extraer cantidad del paquete si el producto tiene "PAQUETE de X Unidades"
+    let paqueteCantidad = "";
+    let unidad = "UNIDAD";
+    if (typeof product.unidad === "string") {
+      const match = product.unidad.match(/PAQUETE de (\d+)/);
+      if (match) {
+        paqueteCantidad = match[1];
+        unidad = "PAQUETE";
+      }
     }
-  }
 
-  // porcentajeGanancia: si viene del producto úsalo, si no usa 75 por defecto
-  // Despejar porcentajeGanancia desde valorConIvaSugerido si no existe
-const cantidad = Number(product.cantidad ?? 0);
-const costo = Number(product.costoUnitario ?? 0); // DECLARAR UNA SOLA VEZ
-const valorConIva = Number(product.valorConIvaSugerido ?? 0);
+    const cantidad = Number(product.cantidad ?? 0);
+    const costo = Number(product.costoUnitario ?? 0);
+    const valorConIva = Number(product.valorConIvaSugerido ?? 0);
 
-let porcentajeGuardado = 0;
-if (costo > 0) {
-  porcentajeGuardado = ((valorConIva / (costo * 1.12)) - 1) * 100;
-}
+    // Despejar % ganancia
+    const porcentajeGuardado =
+      costo > 0 ? Math.round(((valorConIva / (costo * 1.12)) - 1) * 100) : 0;
 
+    const valorInventario = cantidad * costo;
 
-const valorInventario = cantidad * costo;
-const valorConIvaSugerido = costo + (costo * (porcentajeGuardado / 100)) + (costo * 0.12);
-
-
-  setFormData({
-    sku: product.sku || "",
-    nombreArticulo: product.nombreArticulo || "",
-    descripcion: product.descripcion || "",
-    proveedor: product.proveedor?._id || product.proveedor || "",
-    unidad,
-    cantidad,
-    costoUnitario: costo,
-    valorInventario,
-    valorConIvaSugerido,
-    valorReal: Number(product.valorReal ?? 0),
-    porcentajeGanancia: porcentajeGuardado,
-    paqueteCantidad,
-    imagenes: [],
-  });
-} else {
+    setFormData({
+      sku: product.sku || "",
+      nombreArticulo: product.nombreArticulo || "",
+      descripcion: product.descripcion || "",
+      proveedor: product.proveedor?._id || product.proveedor || "",
+      unidad,
+      cantidad,
+      costoUnitario: costo,
+      valorInventario,
+      valorConIvaSugerido: valorConIva, // usar el valor que ya está guardado
+      valorReal: Number(product.valorReal ?? 0),
+      porcentajeGanancia: porcentajeGuardado, // este es solo para mostrar en el input
+      paqueteCantidad,
+      imagenes: [],
+    });
+  } else {
     // Limpiar formulario para agregar nuevo producto
     setFormData({
       sku: "",
@@ -216,6 +208,15 @@ const valorConIvaSugerido = costo + (costo * (porcentajeGuardado / 100)) + (cost
     });
   }, [products, filters]);
 
+  // Totales
+  const totalValorInventario = useMemo(() => {
+    return filteredProducts.reduce((acc, p) => acc + (Number(p.valorInventario) || 0), 0);
+  }, [filteredProducts]);
+
+  const totalValorReal = useMemo(() => {
+    return filteredProducts.reduce((acc, p) => acc + (Number(p.valorReal) || 0), 0);
+  }, [filteredProducts]);
+
   return (
     <>
       <CustomNavbar />
@@ -284,11 +285,12 @@ const valorConIvaSugerido = costo + (costo * (porcentajeGuardado / 100)) + (cost
                 <th>VALOR REAL</th>
                 <th>Acciones</th>
               </tr>
+
             </thead>
             <tbody>
               {filteredProducts.map((p) => (
                 <tr key={p._id}>
-                  <td>
+                  <td data-label="Imagen">
                     {p.imagenes?.length ? (
                       <img
                         src={`http://localhost:3333/${p.imagenes[0]}`}
@@ -299,20 +301,20 @@ const valorConIvaSugerido = costo + (costo * (porcentajeGuardado / 100)) + (cost
                       "—"
                     )}
                   </td>
-                  <td>{p.sku}</td>
-                  <td>{p.nombreArticulo}</td>
-                  <td>{p.descripcion}</td>
-                  <td>{p.proveedor?.name || "—"}</td>
-                  <td>{formatDate(p.factura?.fechaCompra)}</td>
-                  <td>{p.factura?.noFactura || "—"}</td>
-                  <td>{p.factura?.serieFactura || "—"}</td>
-                  <td>{p.unidad}</td>
-                  <td>{p.cantidad}</td>
-                  <td>{formatCurrency(Number(p.costoUnitario))}</td>
-                  <td>{formatCurrency(Number(p.valorInventario))}</td>
-                  <td>{formatCurrency(Number(p.valorConIvaSugerido ?? 0))}</td>
-                  <td>{formatCurrency(Number(p.valorReal))}</td>
-                  <td className="actions">
+                  <td data-label="SKU"><span>{p.sku}</span></td>
+                  <td data-label="NOMBRE DEL ARTICULO"><span>{p.nombreArticulo}</span></td>
+                  <td data-label="DESCRIPCIÓN"><span>{p.descripcion}</span></td>
+                  <td data-label="PROVEEDOR"><span>{p.proveedor?.name || "—"}</span></td>
+                  <td data-label="FECHA DE COMPRA"><span>{formatDate(p.factura?.fechaCompra)}</span></td>
+                  <td data-label="NO. FACTURA"><span>{p.factura?.noFactura || "—"}</span></td>
+                  <td data-label="SERIE DE FACTURA"><span>{p.factura?.serieFactura || "—"}</span></td>
+                  <td data-label="UNIDAD"><span>{p.unidad}</span></td>
+                  <td data-label="CANT."><span>{p.cantidad}</span></td>
+                  <td data-label="COSTO UNITARIO"><span>{formatCurrency(Number(p.costoUnitario))}</span></td>
+                  <td data-label="VALOR DE INVENTARIO"><span>{formatCurrency(Number(p.valorInventario))}</span></td>
+                  <td data-label="VALOR CON IVA Y % SUGERIDO"><span>{formatCurrency(Number(p.valorConIvaSugerido ?? 0))}</span></td>
+                  <td data-label="VALOR REAL"><span>{formatCurrency(Number(p.valorReal))}</span></td>
+                  <td data-label="Acciones" className="actions">
                     <button
                       className="btn-warning"
                       onClick={() => handleOpenModal(p)}
@@ -339,6 +341,11 @@ const valorConIvaSugerido = costo + (costo * (porcentajeGuardado / 100)) + (cost
               )}
             </tbody>
           </table>
+          <div className="table-totals">
+            <span>Total Valor Inventario: {formatCurrency(totalValorInventario)}</span>
+            <span>Total Valor Real: {formatCurrency(totalValorReal)}</span>
+        </div>
+
         </div>
 
         {/* Modal */}
@@ -454,17 +461,18 @@ const valorConIvaSugerido = costo + (costo * (porcentajeGuardado / 100)) + (cost
 
                 <label>% Ganancia</label>
                 <input
-                    type="number"
-                    value={formData.porcentajeGanancia ?? 0}
-                    onChange={(e) =>
-                        setFormData((d) => ({
-                        ...d,
-                        porcentajeGanancia: Number(e.target.value),
-                        }))
-                    }
-                    min="0"
-                    step="0.01"
-                    />
+                  type="number"
+                  value={formData.porcentajeGanancia ?? 0}
+                  onChange={(e) =>
+                    setFormData((d) => ({
+                      ...d,
+                      porcentajeGanancia: Math.round(Number(e.target.value)), // redondea al entero más cercano
+                    }))
+                  }
+                  min="0"
+                  step="1" // opcional, para que el input suba/baje de 1 en 1
+                />
+
 
                 <label>Valor Inventario</label>
                 <input

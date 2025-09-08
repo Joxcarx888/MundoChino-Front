@@ -143,11 +143,13 @@ export const InvoicesPage = () => {
     });
   }, [invoices, searchNo, searchSerie, searchProveedor, searchProducto, startDate, endDate]);
 
+  
+
   return (
     <>
       <CustomNavbar />
       <Container className="invoices-page my-5 pt-5">
-        <h2 className="mb-4">Facturas</h2>
+        <h2 className="mb-4">Compras</h2>
 
         {/* filtros */}
         <Row className="mb-3 g-2">
@@ -246,7 +248,14 @@ export const InvoicesPage = () => {
           {expanded === inv._id ? "▲" : "▼"}
         </Button>
       </td>
-      <td>{inv.fechaCompra.split("T")[0]}</td>
+      <td>
+        {(() => {
+            const [year, month, day] = inv.fechaCompra.split("T")[0].split("-");
+            return `${day}/${month}/${year}`;
+        })()}
+        </td>
+
+
       <td>{inv.noFactura}</td>
       <td>{inv.serieFactura}</td>
       <td>{inv.proveedor?.name}</td>

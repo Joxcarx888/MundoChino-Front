@@ -16,8 +16,9 @@ export const DashboardPage = () => {
 
   const cards = [
     { label: "Productos", path: "/products", color: "primary" },
-    { label: "Facturas", path: "/invoices", color: "success" },
+    { label: "Compras", path: "/invoices", color: "success" },
     { label: "Clientes", path: "/clients", color: "warning" },
+    { label: "Ventas", path: "/sales", color: "danger" },
   ];
 
   return (

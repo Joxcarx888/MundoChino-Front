@@ -1,7 +1,7 @@
 /* Página principal del dashboard */
 .dashboard-page {
   min-height: 100vh;
-  background-color: #f8f9fa; /* gris claro bootstrap */
+  background-color: #ca150e; /* gris claro bootstrap */
   padding-top: 5rem; /* espacio para navbar fijo */
   padding-left: 1rem;
   padding-right: 1rem;
@@ -9,7 +9,7 @@
 
 /* Título principal */
 .dashboard-page h1 {
-  color: #212529; /* gris oscuro bootstrap */
+  color: #ffffff; /* gris oscuro bootstrap */
   font-family: 'Inter', sans-serif;
   font-weight: 700;
   margin-bottom: 2rem;

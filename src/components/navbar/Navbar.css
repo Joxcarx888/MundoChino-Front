@@ -1,6 +1,5 @@
 /* Fondo y sombra */
 .custom-navbar {
-  background-color: #ffffff !important;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   padding-top: 0.25rem !important;   /* compactamos */
   padding-bottom: 0.25rem !important;
@@ -8,7 +7,8 @@
 
 /* Logo */
 .custom-navbar .logo {
-  height: 36px;   /* más compacto */
+  height: 72px;  /* El doble de grande */
+  width: 110px;  /* El doble de grande, manteniendo la proporción */
   margin-right: 10px;
 }
 
@@ -28,7 +28,7 @@
 .custom-navbar .nav-link {
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-  color: #374151 !important; /* gris medio */
+  color: #be0c07 !important; /* gris medio */
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
@@ -36,6 +36,11 @@
   color: #0d6efd !important; /* azul bootstrap */
   transform: translateY(-2px);
 }
+
+.custom-navbar.bg-light {
+  background-color: #f5a202 !important;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {

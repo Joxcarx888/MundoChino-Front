@@ -1,18 +1,19 @@
+// src/components/PrivateRoute.jsx
 import { Navigate } from "react-router-dom";
 
 export const PrivateRoute = ({ children, allowedRoles }) => {
-  const userStr = localStorage.getItem("user");
-  const user = userStr ? JSON.parse(userStr) : null;
+  const storedUser = JSON.parse(localStorage.getItem("user"));
 
-  if (!user) {
-    return <Navigate to="/auth" />;
-  }
-
-  const userRole = user.role?.toUpperCase();
-
-  if (allowedRoles && !allowedRoles.includes(userRole)) {
+  // ❌ No logueado → redirigir al dashboard
+  if (!storedUser) {
     return <Navigate to="/dashboard" />;
   }
 
+  // ❌ Logueado pero sin rol permitido → redirigir al dashboard
+  if (allowedRoles && !allowedRoles.includes(storedUser.role)) {
+    return <Navigate to="/dashboard" />;
+  }
+
+  // ✅ Acceso permitido
   return children;
 };

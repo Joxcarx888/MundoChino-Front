@@ -260,6 +260,47 @@ export const hardDeleteSale = async (id) => {
   }
 };
 
+// =================== USERS ===================
+
+// 📌 Listar usuarios
+export const getUsers = async () => {
+  try {
+    const res = await apiClient.get("user/");
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+// 📌 Editar usuario (solo ADMIN)
+export const updateUser = async (id, data) => {
+  try {
+    const res = await apiClient.put(`user/editar/${id}`, data);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+// 📌 Eliminar usuario lógico (solo ADMIN)
+export const deleteUser = async (id) => {
+  try {
+    const res = await apiClient.delete(`user/eliminar/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
+
+// 📌 Eliminar usuario físico (solo ADMIN)
+export const hardDeleteUser = async (id) => {
+  try {
+    const res = await apiClient.delete(`user/hard/${id}`);
+    return res.data;
+  } catch (e) {
+    return { error: true, e };
+  }
+};
 
 
 export default apiClient;

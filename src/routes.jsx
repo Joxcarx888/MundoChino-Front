@@ -6,19 +6,15 @@ import { ProductsPage } from "./pages/products";
 import { ClientsPage } from "./pages/clients";
 import { SalesPage } from "./pages/sales";
 import { Auth } from "./pages/auth/auth";
+import { UsersPage } from "./pages/users";
 import { PrivateRoute } from "./components/PrivateRoute";
 
 const routes = [
   { path: '/auth', element: <Auth /> },
 
-  // Dashboard protegido solo para ADMIN y CLIENT
   { 
     path: '/dashboard', 
-    element: (
-      <PrivateRoute allowedRoles={["ADMIN", "CLIENT"]}>
-        <DashboardPage />
-      </PrivateRoute>
-    ) 
+    element: (   <DashboardPage /> ) 
   },
 
   { path: '/providers', element: <ProvidersPage /> },
@@ -30,6 +26,15 @@ const routes = [
   { path: '/clients', element: <ClientsPage /> },
 
   { path: '/sales', element: <SalesPage /> },
+
+  { 
+    path: '/users', 
+    element: (
+      <PrivateRoute allowedRoles={["ADMIN"]}>
+        <UsersPage />
+      </PrivateRoute>
+    ) 
+  },
 
   { path: '*', element: <Navigate to="/dashboard" /> }
 ];

@@ -1,0 +1,111 @@
+/* Encapsulado para esta página */
+.users-page * {
+  box-sizing: border-box;
+  font-family: "Ancizar Sans", sans-serif;
+}
+
+/* Contenedor principal */
+.users-page {
+  padding-top: 20px;
+  min-height: 100vh;
+  background-color: #f8f9fa; /* gris suave */
+}
+
+/* Título */
+.users-page h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Inputs de agregar usuario */
+.users-page .add-user-row .form-control {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  height: 40px;
+  padding: 0 12px;
+  font-size: 14px;
+  margin-bottom: 10px; /* margen entre inputs */
+}
+
+/* Botón agregar */
+.users-page .add-user-row .btn {
+  border-radius: 6px;
+  font-weight: 600;
+  height: 40px;
+  margin-top: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+.users-page .add-user-row .btn:hover {
+  transform: translateY(-1px);
+}
+
+/* Cards de usuarios */
+.users-page .card {
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: all 0.2s ease-in-out;
+}
+
+.users-page .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.users-page .card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.users-page .card-text {
+  font-size: 14px;
+  color: #555;
+}
+
+/* Botones dentro de la card */
+.users-page .card .btn {
+  font-size: 13px;
+  padding: 4px 10px;
+}
+
+/* Modal edición */
+.users-page .modal-content {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.users-page .modal-header {
+  background-color: #f1f3f5;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.users-page .modal-title {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.users-page .modal-body .form-label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.users-page .modal-body .form-control {
+  font-size: 14px;
+  height: 38px;
+  margin-bottom: 10px; /* margen entre campos */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .users-page .add-user-row .form-control,
+  .users-page .add-user-row .btn {
+    margin-bottom: 10px !important;
+  }
+
+  .users-page .card .btn {
+    width: 48%;
+  }
+}

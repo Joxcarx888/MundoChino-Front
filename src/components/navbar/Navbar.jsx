@@ -3,13 +3,17 @@ import { Navbar, Container, Nav } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assets/img/Logo.png";
 import "./navbar.css"; 
-import { logout } from "../../shared/hooks/useLogout"; // importamos tu hook
+import { logout } from "../../shared/hooks/useLogout";
 
 const CustomNavbar = () => {
   const navigate = useNavigate();
 
+  // ✅ Obtener user de localStorage
+  const storedUser = JSON.parse(localStorage.getItem("user"));
+  const role = storedUser?.role || null;
+
   const handleLogout = () => {
-    logout(); // Borra el localStorage y redirige
+    logout();
   };
 
   return (
@@ -28,6 +32,12 @@ const CustomNavbar = () => {
             <Nav.Link onClick={() => navigate("/invoices")}>Compras</Nav.Link>
             <Nav.Link onClick={() => navigate("/clients")}>Clientes</Nav.Link>
             <Nav.Link onClick={() => navigate("/sales")}>Ventas</Nav.Link>
+
+            {/* ✅ Solo aparece si es ADMIN */}
+            {role === "ADMIN" && (
+              <Nav.Link onClick={() => navigate("/users")}>Usuarios</Nav.Link>
+            )}
+
             <Nav.Link onClick={handleLogout}>Cerrar Sesión</Nav.Link>
           </Nav>
         </Navbar.Collapse>

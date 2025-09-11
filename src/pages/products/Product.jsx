@@ -5,6 +5,15 @@ import { useProviders } from "../../shared/hooks/useProviders";
 import CustomNavbar from "../../components/navbar/Navbar";
 import "./Product.css";
 
+const role = (() => {
+    try {
+      const u = localStorage.getItem("user");
+      return u ? JSON.parse(u).role : "USER";
+    } catch {
+      return "USER";
+    }
+  })();
+
 export const ProductsPage = () => {
   const { products, addProduct, editProduct, removeProduct } = useProducts();
   const { providers } = useProviders();
@@ -259,9 +268,11 @@ const handleOpenModal = (product = null) => {
             }
           />
 
-          <button className="btn-primary" onClick={() => handleOpenModal()}>
-            ➕ Agregar Producto
-          </button>
+          {role === "ADMIN" && (
+            <button className="btn-primary" onClick={() => handleOpenModal()}>
+              ➕ Agregar Producto
+            </button>
+          )}
         </div>
 
         {/* Tabla */}
@@ -279,11 +290,11 @@ const handleOpenModal = (product = null) => {
                 <th>SERIE DE FACTURA</th>
                 <th>UNIDAD</th>
                 <th>CANT.</th>
-                <th>COSTO UNITARIO</th>
-                <th>VALOR DE INVENTARIO</th>
-                <th>VALOR CON IVA Y % SUGERIDO</th>
+                {role === "ADMIN" && <th>COSTO UNITARIO</th>}
+                {role === "ADMIN" && <th>VALOR DE INVENTARIO</th>}
+                {role === "ADMIN" && <th>VALOR CON IVA Y % SUGERIDO</th>}
                 <th>VALOR REAL</th>
-                <th>Acciones</th>
+                {role === "ADMIN" && <th>Acciones</th>}
               </tr>
 
             </thead>
@@ -310,17 +321,32 @@ const handleOpenModal = (product = null) => {
                   <td data-label="SERIE DE FACTURA"><span>{p.factura?.serieFactura || "—"}</span></td>
                   <td data-label="UNIDAD"><span>{p.unidad}</span></td>
                   <td data-label="CANT."><span>{p.cantidad}</span></td>
-                  <td data-label="COSTO UNITARIO"><span>{formatCurrency(Number(p.costoUnitario))}</span></td>
-                  <td data-label="VALOR DE INVENTARIO"><span>{formatCurrency(Number(p.valorInventario))}</span></td>
-                  <td data-label="VALOR CON IVA Y % SUGERIDO"><span>{formatCurrency(Number(p.valorConIvaSugerido ?? 0))}</span></td>
+                 {role === "ADMIN" && (
+                    <td data-label="COSTO UNITARIO">
+                      <span>{formatCurrency(Number(p.costoUnitario))}</span>
+                    </td>
+                  )}
+                  {role === "ADMIN" && (
+                    <td data-label="VALOR DE INVENTARIO">
+                      <span>{formatCurrency(Number(p.valorInventario))}</span>
+                    </td>
+                  )}
+                  {role === "ADMIN" && (
+                    <td data-label="VALOR CON IVA Y % SUGERIDO">
+                      <span>{formatCurrency(Number(p.valorConIvaSugerido ?? 0))}</span>
+                    </td>
+                  )}
                   <td data-label="VALOR REAL"><span>{formatCurrency(Number(p.valorReal))}</span></td>
+                  {role === "ADMIN" && (
                   <td data-label="Acciones" className="actions">
+                    {role === "ADMIN" && (
                     <button
                       className="btn-warning"
                       onClick={() => handleOpenModal(p)}
                     >
                       Editar
                     </button>
+                    )}   
                     {role === "ADMIN" && (
                       <button
                         className="btn-danger"
@@ -330,6 +356,7 @@ const handleOpenModal = (product = null) => {
                       </button>
                     )}
                   </td>
+                  )}
                 </tr>
               ))}
               {filteredProducts.length === 0 && (
@@ -341,8 +368,11 @@ const handleOpenModal = (product = null) => {
               )}
             </tbody>
           </table>
+          {/* Totales: solo ADMIN ve el total inventario */}
           <div className="table-totals">
-            <span>Total Valor Inventario: {formatCurrency(totalValorInventario)}</span>
+            {role === "ADMIN" && (
+              <span>Total Valor Inventario: {formatCurrency(totalValorInventario)}</span>
+            )}
             <span>Total Valor Real: {formatCurrency(totalValorReal)}</span>
         </div>
 

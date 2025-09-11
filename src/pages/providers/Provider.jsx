@@ -3,10 +3,12 @@ import { useProviders } from "../../shared/hooks/useProviders";
 import { Button, Form, Container, Row, Col, Card, Modal } from "react-bootstrap";
 import { toast } from "react-hot-toast";
 import CustomNavbar from "../../components/navbar/Navbar";
+import { useUserDetails } from "../../shared/hooks/useUserDetails"; 
 import "./Provider.css";
 
 export const ProvidersPage = () => {
   const { providers, addProvider, editProvider, removeProvider, loading } = useProviders();
+  const { role } = useUserDetails(); // 🔹 obtenemos rol del usuario
   const [search, setSearch] = useState("");
 
   const [newProvider, setNewProvider] = useState({
@@ -92,47 +94,49 @@ export const ProvidersPage = () => {
           </Col>
         </Row>
 
-        {/* Agregar proveedor */}
-        <Row className="mb-4 g-2 add-provider-row">
-          <Col md={3} sm={12}>
-            <Form.Control
-              type="text"
-              placeholder="Nombre *"
-              value={newProvider.name}
-              onChange={(e) =>
-                setNewProvider({ ...newProvider, name: e.target.value })
-              }
-              className="mb-2"
-            />
-          </Col>
-          <Col md={4} sm={12}>
-            <Form.Control
-              type="email"
-              placeholder="Email"
-              value={newProvider.email}
-              onChange={(e) =>
-                setNewProvider({ ...newProvider, email: e.target.value })
-              }
-              className="mb-2"
-            />
-          </Col>
-          <Col md={3} sm={12}>
-            <Form.Control
-              type="text"
-              placeholder="Número"
-              value={newProvider.number}
-              onChange={(e) =>
-                setNewProvider({ ...newProvider, number: e.target.value })
-              }
-              className="mb-2"
-            />
-          </Col>
-          <Col md={2} sm={12}>
-            <Button className="w-100 mb-2" onClick={handleAddProvider}>
-              Agregar
-            </Button>
-          </Col>
-        </Row>
+        {/* Agregar proveedor - SOLO ADMIN */}
+        {role === "ADMIN" && (
+          <Row className="mb-4 g-2 add-provider-row">
+            <Col md={3} sm={12}>
+              <Form.Control
+                type="text"
+                placeholder="Nombre *"
+                value={newProvider.name}
+                onChange={(e) =>
+                  setNewProvider({ ...newProvider, name: e.target.value })
+                }
+                className="mb-2"
+              />
+            </Col>
+            <Col md={4} sm={12}>
+              <Form.Control
+                type="email"
+                placeholder="Email"
+                value={newProvider.email}
+                onChange={(e) =>
+                  setNewProvider({ ...newProvider, email: e.target.value })
+                }
+                className="mb-2"
+              />
+            </Col>
+            <Col md={3} sm={12}>
+              <Form.Control
+                type="text"
+                placeholder="Número"
+                value={newProvider.number}
+                onChange={(e) =>
+                  setNewProvider({ ...newProvider, number: e.target.value })
+                }
+                className="mb-2"
+              />
+            </Col>
+            <Col md={2} sm={12}>
+              <Button className="w-100 mb-2" onClick={handleAddProvider}>
+                Agregar
+              </Button>
+            </Col>
+          </Row>
+        )}
 
         {/* Lista de proveedores */}
         {loading ? (
@@ -150,22 +154,26 @@ export const ProvidersPage = () => {
                       {provider.email && <div>Email: {provider.email}</div>}
                       {provider.number && <div>Número: {provider.number}</div>}
                     </div>
-                    <div className="mt-3 d-flex justify-content-between">
-                      <Button
-                        variant="outline-primary"
-                        size="sm"
-                        onClick={() => handleOpenEditModal(provider)}
-                      >
-                        Editar
-                      </Button>
-                      <Button
-                        variant="outline-danger"
-                        size="sm"
-                        onClick={() => handleDeleteProvider(provider._id)}
-                      >
-                        Eliminar
-                      </Button>
-                    </div>
+
+                    {/* Botones SOLO ADMIN */}
+                    {role === "ADMIN" && (
+                      <div className="mt-3 d-flex justify-content-between">
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={() => handleOpenEditModal(provider)}
+                        >
+                          Editar
+                        </Button>
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => handleDeleteProvider(provider._id)}
+                        >
+                          Eliminar
+                        </Button>
+                      </div>
+                    )}
                   </Card.Body>
                 </Card>
               </Col>

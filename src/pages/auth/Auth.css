@@ -7,7 +7,7 @@
 .auth-page {
   width: 100%;
   height: 100vh;
-  background: url('../../assets/img/Fondo.jpg') no-repeat center center fixed;
+  background-color: #ca150e;
   background-size: cover;
 }
 

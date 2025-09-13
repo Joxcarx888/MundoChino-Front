@@ -88,7 +88,7 @@ export const Login = () => {
       </div>
       {errors.password && <p className="auth-error">Este campo es obligatorio</p>}
 
-      <a href="/resetPassword" className="auth-link d-block mb-3">
+      <a href="/auth" className="auth-link d-block mb-3">
         ¿Olvidaste tu contraseña?
       </a>
 

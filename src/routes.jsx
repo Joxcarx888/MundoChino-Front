@@ -10,25 +10,29 @@ import { UsersPage } from "./pages/users";
 import { PrivateRoute } from "./components/PrivateRoute";
 
 const routes = [
-  { path: '/auth', element: <Auth /> },
+  { path: "/auth", element: <Auth /> },
+
+  { path: "/dashboard", element: <DashboardPage /> },
+
+  { path: "/providers", element: <ProvidersPage /> },
 
   { 
-    path: '/dashboard', 
-    element: (   <DashboardPage /> ) 
+    path: "/invoices", 
+    element: (
+      <PrivateRoute allowedRoles={["ADMIN"]}>
+        <InvoicesPage />
+      </PrivateRoute>
+    ) 
   },
 
-  { path: '/providers', element: <ProvidersPage /> },
+  { path: "/products", element: <ProductsPage /> },
 
-  { path: '/invoices', element: <InvoicesPage /> },
+  { path: "/clients", element: <ClientsPage /> },
 
-  { path: '/products', element: <ProductsPage /> },
-
-  { path: '/clients', element: <ClientsPage /> },
-
-  { path: '/sales', element: <SalesPage /> },
+  { path: "/sales", element: <SalesPage /> },
 
   { 
-    path: '/users', 
+    path: "/users", 
     element: (
       <PrivateRoute allowedRoles={["ADMIN"]}>
         <UsersPage />
@@ -36,7 +40,7 @@ const routes = [
     ) 
   },
 
-  { path: '*', element: <Navigate to="/dashboard" /> }
+  { path: "*", element: <Navigate to="/dashboard" /> },
 ];
 
 export default routes;

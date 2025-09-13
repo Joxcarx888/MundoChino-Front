@@ -29,7 +29,9 @@ const CustomNavbar = () => {
             <Nav.Link onClick={() => navigate("/dashboard")}>Inicio</Nav.Link>
             <Nav.Link onClick={() => navigate("/products")}>Productos</Nav.Link>
             <Nav.Link onClick={() => navigate("/providers")}>Proveedores</Nav.Link>
-            <Nav.Link onClick={() => navigate("/invoices")}>Compras</Nav.Link>
+            {role === "ADMIN" && (
+              <Nav.Link onClick={() => navigate("/invoices")}>Compras</Nav.Link>
+            )}
             <Nav.Link onClick={() => navigate("/clients")}>Clientes</Nav.Link>
             <Nav.Link onClick={() => navigate("/sales")}>Ventas</Nav.Link>
 

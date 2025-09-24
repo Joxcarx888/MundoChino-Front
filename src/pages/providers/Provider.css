@@ -1,108 +1,163 @@
-/* Encapsulado para esta página */
-.providers-page * {
-  box-sizing: border-box;
-  font-family: "Ancizar Sans", sans-serif;
-}
+/* src/pages/Provider.css */
 
-/* Contenedor principal */
+/* ===== Contenedor principal ===== */
 .providers-page {
-  padding-top: 20px;
+  padding: 20px;
   min-height: 100vh;
-  background-color: #f8f9fa; /* gris suave */
+  background-color: #ca150e; /* mismo fondo que products */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #000000;
+  font-weight: bold;
 }
 
-/* Título */
+/* ===== Título ===== */
 .providers-page h2 {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 2rem;
+  color: #fdbd4f;
+  font-weight: bold;
   margin-bottom: 20px;
-  color: #333;
 }
 
-/* Inputs de agregar proveedor */
+/* ===== Buscador ===== */
+.providers-page input[type="text"] {
+  padding: 12px 15px;
+  border-radius: 6px;
+  border: 1px solid #000000;
+  background-color: #f5a202;
+  font-weight: bold;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.providers-page input[type="text"]:focus {
+  outline: none;
+  border-color: #0004ff;
+  background-color: #f5a202;
+}
+
+/* ===== Agregar proveedor ===== */
 .providers-page .add-provider-row .form-control {
+  padding: 8px 10px;
   border-radius: 6px;
-  border: 1px solid #ced4da;
-  height: 40px;
-  padding: 0 12px;
-  font-size: 14px;
-  margin-bottom: 10px; /* margen entre inputs */
+  border: 1px solid #000000;
+  background-color: #fdbd4f;
+  font-weight: bold;
 }
 
-/* Botón agregar */
 .providers-page .add-provider-row .btn {
-  border-radius: 6px;
-  font-weight: 600;
-  height: 40px;
-  margin-top: 10px;
-  transition: all 0.2s ease-in-out;
+  background-color: #10b981;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
 .providers-page .add-provider-row .btn:hover {
-  transform: translateY(-1px);
+  background-color: #059669;
+  transform: scale(1.05);
 }
 
-/* Cards de proveedores */
+/* ===== Cards de proveedores ===== */
 .providers-page .card {
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
-  transition: all 0.2s ease-in-out;
+  border-radius: 12px;
+  background-color: #db7878;
+  border: 2px solid #000000;
+  transition: all 0.2s ease;
+  font-weight: bold;
 }
 
 .providers-page .card:hover {
+  background-color: #fefbe0;
   transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
 .providers-page .card-title {
-  font-size: 18px;
+  font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 5px;
 }
 
 .providers-page .card-text {
-  font-size: 14px;
-  color: #555;
+  font-size: 0.9rem;
+  color: #111827;
 }
 
-/* Botones dentro de la card */
+/* ===== Botones dentro de la card ===== */
 .providers-page .card .btn {
-  font-size: 13px;
-  padding: 4px 10px;
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-/* Modal edición */
+.providers-page .btn-primary {
+  background-color: #1045b9;
+  color: rgb(0, 0, 0);
+  border: none;
+}
+
+.providers-page .btn-primary:hover {
+  background-color: #007ef5;
+  transform: scale(1.05);
+}
+
+.providers-page .btn-danger {
+  background-color: #ef4444;
+  color: white;
+  border: 1px solid #000000;
+}
+
+.providers-page .btn-danger:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
+}
+
+.providers-page .add-provider-row .btn {
+  background-color: #fdbd4f !important;
+  color: rgb(0, 0, 0) !important;
+  padding: 8px 16px !important;
+  border: 1px solid black !important; /* ⬅️ Borde negro añadido */
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+}
+
+
+/* ===== Modal edición ===== */
 .providers-page .modal-content {
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.providers-page .modal-header {
-  background-color: #f1f3f5;
-  border-bottom: 1px solid #dee2e6;
+  background-color: #ca150e;
+  border: 2px solid #000000;
+  border-radius: 12px;
+  padding: 25px 30px;
 }
 
 .providers-page .modal-title {
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.providers-page .modal-body .form-label {
-  font-weight: 500;
-  font-size: 14px;
+  color: #fdbd4f;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
 }
 
 .providers-page .modal-body .form-control {
-  font-size: 14px;
-  height: 38px;
-  margin-bottom: 10px; /* margen entre campos */
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #000000;
+  background-color: #fdbd4f;
+  font-weight: bold;
+  margin-bottom: 12px;
 }
 
-/* Responsive */
+/* ===== Responsividad ===== */
 @media (max-width: 768px) {
-  .providers-page .add-provider-row .form-control,
-  .providers-page .add-provider-row .btn {
-    margin-bottom: 10px !important;
+  .providers-page .add-provider-row {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .providers-page .card .btn {

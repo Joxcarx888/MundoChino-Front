@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Button, Form, Container, Row, Col, Table, Collapse, Modal } from "react-bootstrap";
 import { toast } from "react-hot-toast";
 import CustomNavbar from "../../components/navbar/Navbar";
@@ -9,7 +9,7 @@ import "./Sale.css";
 
 export const SalesPage = () => {
   const { sales, addSale, editSale, removeSale, loading } = useSales();
-  const { clients } = useClients();
+  const { clients, addClient } = useClients();
   const { products } = useProducts();
 
   const [expanded, setExpanded] = useState(null);
@@ -23,12 +23,34 @@ export const SalesPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [editingSale, setEditingSale] = useState(null);
 
+  const [isRecurrent, setIsRecurrent] = useState(false);
+  const [nitSearch, setNitSearch] = useState("");
+  const [foundClient, setFoundClient] = useState(null);
+
+  useEffect(() => {
+    if (isRecurrent && nitSearch.trim()) {
+      const client = clients.find(c => c.nit === nitSearch.trim());
+      setFoundClient(client || null);
+      if (client) {
+        setFormSale(prev => ({ ...prev, cliente: client._id }));
+      }
+    }
+  }, [nitSearch, isRecurrent, clients]);
+
+
+
   // datos de la venta en edición/creación
   const [formSale, setFormSale] = useState({
     fechaVenta: "",
     cliente: "",
     productos: [],
   });
+
+  // total calculado
+  const totalVenta = useMemo(() => {
+    return formSale.productos.reduce((acc, p) => acc + (Number(p.subtotal) || 0), 0);
+  }, [formSale.productos]);
+
 
   // Agregar línea de producto
   const addProductLine = () => {
@@ -89,16 +111,49 @@ export const SalesPage = () => {
   };
 
   const handleSave = async () => {
-    if (!formSale.cliente) {
-      toast.error("El cliente es obligatorio");
-      return;
-    }
-    const res = editingSale ? await editSale(editingSale, formSale) : await addSale(formSale);
-    if (!res.error) {
-      toast.success(editingSale ? "Venta actualizada" : "Venta agregada");
-      setShowModal(false);
+    try {
+      let clientId = formSale.cliente;
+
+      // Si NO es recurrente, se crea cliente nuevo
+      if (!isRecurrent) {
+        if (!formSale.nombreCliente || !formSale.nitCliente) {
+          toast.error("Debe ingresar nombre y NIT del cliente");
+          return;
+        }
+        const resClient = await addClient({
+          nombre: formSale.nombreCliente,
+          nit: formSale.nitCliente,
+        });
+
+        if (resClient.error) {
+          toast.error("Error al crear cliente");
+          return;
+        }
+        clientId = resClient.client._id; // 👈 suponiendo que tu API responde con { client }
+      }
+
+      // Venta que se enviará
+      const ventaData = {
+        fechaVenta: formSale.fechaVenta,
+        cliente: clientId,
+        productos: formSale.productos,
+      };
+
+      const res = editingSale
+        ? await editSale(editingSale, ventaData)
+        : await addSale(ventaData);
+
+      if (!res.error) {
+        toast.success(editingSale ? "Venta actualizada" : "Venta agregada");
+        setShowModal(false);
+      }
+    } catch (err) {
+      toast.error("Error al guardar la venta");
+      console.error(err);
     }
   };
+
+
 
   const handleDelete = async (id) => {
     if (window.confirm("¿Eliminar esta venta?")) {
@@ -234,8 +289,10 @@ export const SalesPage = () => {
           <Modal.Header closeButton>
             <Modal.Title>{editingSale ? "Editar Venta" : "Agregar Venta"}</Modal.Title>
           </Modal.Header>
+
           <Modal.Body>
             <Form>
+              {/* Fecha y (opcionalmente) el cliente */}
               <Row className="mb-3">
                 <Col md={4}>
                   <Form.Label>Fecha Venta</Form.Label>
@@ -245,22 +302,69 @@ export const SalesPage = () => {
                     onChange={(e) => setFormSale({ ...formSale, fechaVenta: e.target.value })}
                   />
                 </Col>
-                <Col md={8}>
-                  <Form.Label>Cliente</Form.Label>
-                  <Form.Select
-                    value={formSale.cliente}
-                    onChange={(e) => setFormSale({ ...formSale, cliente: e.target.value })}
-                  >
-                    <option value="">Seleccione cliente</option>
-                    {clients.map((c) => (
-                      <option key={c._id} value={c._id}>
-                        {c.nombre} - {c.nit}
-                      </option>
-                    ))}
-                  </Form.Select>
+
+                <Col md={8} className="d-flex flex-column">
+                  <Form.Check
+                    className="mb-2"
+                    type="checkbox"
+                    label="Cliente recurrente"
+                    checked={isRecurrent}
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      setIsRecurrent(checked);
+                      setNitSearch("");
+                      setFoundClient(null);
+                      // limpiar campos de cliente nuevo / existente
+                      setFormSale((prev) => ({ ...prev, cliente: "", nombreCliente: "", nitCliente: "" }));
+                    }}
+                  />
+
+                  {isRecurrent ? (
+                    <>
+                      <Form.Label>Buscar cliente por NIT</Form.Label>
+                      <div className="d-flex gap-2">
+                        <Form.Control
+                          type="text"
+                          placeholder="Ingrese NIT del cliente"
+                          value={nitSearch}
+                          onChange={(e) => setNitSearch(e.target.value)}
+                        />
+                        {/* botón opcional para forzar búsqueda (no necesario si usas useEffect) */}
+                        <Button variant="outline-secondary" onClick={() => setNitSearch(nitSearch.trim())}>
+                          Buscar
+                        </Button>
+                      </div>
+
+                      {foundClient ? (
+                        <div className="mt-2 p-2 border rounded bg-light">
+                          <strong>Cliente encontrado:</strong> {foundClient.nombre} — NIT: {foundClient.nit}
+                        </div>
+                      ) : nitSearch ? (
+                        <div className="mt-2 text-danger">No se encontró cliente con este NIT</div>
+                      ) : null}
+                    </>
+                  ) : (
+                    <>
+                      <Form.Label>Nombre del Cliente</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="Nombre"
+                        value={formSale.nombreCliente || ""}
+                        onChange={(e) => setFormSale({ ...formSale, nombreCliente: e.target.value })}
+                      />
+                      <Form.Label className="mt-2">NIT</Form.Label>
+                      <Form.Control
+                        type="text"
+                        placeholder="NIT"
+                        value={formSale.nitCliente || ""}
+                        onChange={(e) => setFormSale({ ...formSale, nitCliente: e.target.value })}
+                      />
+                    </>
+                  )}
                 </Col>
               </Row>
 
+              {/* Productos header */}
               <h5>Productos</h5>
               <Row className="mb-2 fw-bold">
                 <Col md={3}>Producto</Col>
@@ -269,6 +373,7 @@ export const SalesPage = () => {
                 <Col md={2}>Subtotal</Col>
               </Row>
 
+              {/* Filas de productos */}
               {formSale.productos.map((p, idx) => (
                 <Row key={idx} className="mb-2">
                   <Col md={3}>
@@ -308,17 +413,29 @@ export const SalesPage = () => {
                 </Row>
               ))}
 
-              <Button size="sm" variant="outline-secondary" onClick={addProductLine}>
+              {/* Total general */}
+              <Row className="mt-3">
+                <Col md={7}></Col>
+                <Col md={2} className="fw-bold text-end">
+                  Total:
+                </Col>
+                <Col md={2}>
+                  <Form.Control type="number" value={totalVenta} readOnly />
+                </Col>
+              </Row>
+
+              <Button size="sm" variant="outline-secondary" onClick={addProductLine} className="mt-3">
                 + Agregar producto
               </Button>
             </Form>
           </Modal.Body>
+
           <Modal.Footer>
             <Button variant="secondary" onClick={() => setShowModal(false)}>
               Cancelar
             </Button>
             <Button variant="primary" onClick={handleSave}>
-              Guardar
+              {editingSale ? "Actualizar" : "Guardar"}
             </Button>
           </Modal.Footer>
         </Modal>

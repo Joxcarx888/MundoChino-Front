@@ -285,9 +285,9 @@ const handleOpenModal = (product = null) => {
                 <th>NOMBRE DEL ARTICULO</th>
                 <th>DESCRIPCIÓN</th>
                 <th>NOMBRE DEL PROVEEDOR</th>
-                <th>FECHA DE COMPRA</th>
-                <th>NO. FACTURA</th>
-                <th>SERIE DE FACTURA</th>
+                {role === "ADMIN" &&<th>FECHA DE COMPRA</th>}
+                {role === "ADMIN" &&<th>NO. FACTURA</th>}
+                {role === "ADMIN" &&<th>SERIE DE FACTURA</th>}
                 <th>UNIDAD</th>
                 <th>CANT.</th>
                 {role === "ADMIN" && <th>COSTO UNITARIO</th>}

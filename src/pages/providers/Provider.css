@@ -130,21 +130,27 @@
 
 
 /* ===== Modal edición ===== */
-.providers-page .modal-content {
-  background-color: #ca150e;
+/* ===== Modal edición Proveedor ===== */
+.provider-modal {
+  background-color: #ca150e;   /* rojo fuerte */
   border: 2px solid #000000;
   border-radius: 12px;
   padding: 25px 30px;
 }
 
-.providers-page .modal-title {
-  color: #fdbd4f;
+.provider-modal .modal-title {
+  color: #fdbd4f;   /* dorado */
   font-weight: bold;
   font-size: 1.5rem;
   margin-bottom: 15px;
 }
 
-.providers-page .modal-body .form-control {
+.provider-modal .form-label {
+  color: #fff;
+  font-weight: 600;
+}
+
+.provider-modal .form-control {
   padding: 8px 10px;
   border-radius: 6px;
   border: 1px solid #000000;
@@ -152,6 +158,31 @@
   font-weight: bold;
   margin-bottom: 12px;
 }
+
+.provider-modal .btn-secondary {
+  background-color: #5e1414;
+  color: #fff;
+  border: 1px solid #000000;
+  font-weight: bold;
+}
+
+.provider-modal .btn-secondary:hover {
+  background-color: #634b4b;
+  transform: scale(1.05);
+}
+
+.provider-modal .btn-primary {
+  background-color: #24b910;
+  color: #000;
+  border: 1px solid #000000;
+  font-weight: bold;
+}
+
+.provider-modal .btn-primary:hover {
+  background-color: #8ad38e;
+  transform: scale(1.05);
+}
+
 
 /* ===== Responsividad ===== */
 @media (max-width: 768px) {

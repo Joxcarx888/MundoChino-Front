@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react";
-import { useProviders } from "../../shared/hooks/useProviders"; 
+import { useProviders } from "../../shared/hooks/useProviders";
 import { Button, Form, Container, Row, Col, Card, Modal } from "react-bootstrap";
 import { toast } from "react-hot-toast";
 import CustomNavbar from "../../components/navbar/Navbar";
-import { useUserDetails } from "../../shared/hooks/useUserDetails"; 
+import { useUserDetails } from "../../shared/hooks/useUserDetails";
 import "./Provider.css";
 
 export const ProvidersPage = () => {
@@ -182,7 +182,12 @@ export const ProvidersPage = () => {
         )}
 
         {/* Modal de edición */}
-        <Modal show={editModal} onHide={() => setEditModal(false)}>
+        <Modal
+          show={editModal}
+          onHide={() => setEditModal(false)}
+          contentClassName="provider-modal"
+        >
+
           <Modal.Header closeButton>
             <Modal.Title>Editar Proveedor</Modal.Title>
           </Modal.Header>

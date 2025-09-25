@@ -142,6 +142,66 @@
   margin-bottom: 12px;
 }
 
+/* ===== Modal edición (Clients) ===== */
+.client-modal {
+  background-color: #ca150e;   /* rojo fuerte */
+  border: 2px solid #000000;
+  border-radius: 12px;
+  padding: 25px 30px;
+}
+
+.client-modal .modal-header {
+  border-bottom: 1px solid #000;
+}
+
+.client-modal .modal-title {
+  color: #fdbd4f;   /* dorado */
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.client-modal .form-label {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.client-modal .form-control {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #000000;
+  background-color: #fdbd4f; /* dorado */
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+.client-modal .btn-secondary {
+  background-color: #000000;
+  color: #fff;
+  border: 1px solid #000000;
+  font-weight: bold;
+}
+
+.client-modal .btn-secondary:hover {
+  background-color: #4b5563;
+  transform: scale(1.05);
+}
+
+.client-modal .btn-primary {
+  background-color: #24b910;
+  color: #000;
+  border: 1px solid #000000;
+  font-weight: bold;
+}
+
+.client-modal .btn-primary:hover {
+  background-color: #74b38c;
+  transform: scale(1.05);
+}
+
+
+
 /* ===== Responsividad ===== */
 @media (max-width: 768px) {
   .clients-page .add-client-row {

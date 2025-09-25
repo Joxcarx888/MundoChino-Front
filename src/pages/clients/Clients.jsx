@@ -1,6 +1,6 @@
 // src/pages/clients/ClientsPage.jsx
 import { useState, useMemo } from "react";
-import { useClients } from "../../shared/hooks/useClients"; 
+import { useClients } from "../../shared/hooks/useClients";
 import { Button, Form, Container, Row, Col, Card, Modal } from "react-bootstrap";
 import { toast } from "react-hot-toast";
 import CustomNavbar from "../../components/navbar/Navbar";
@@ -223,7 +223,12 @@ export const ClientsPage = () => {
         )}
 
         {/* Modal de edición */}
-        <Modal show={editModal} onHide={() => setEditModal(false)}>
+        <Modal
+          show={editModal}
+          onHide={() => setEditModal(false)}
+          contentClassName="client-modal"
+        >
+
           <Modal.Header closeButton>
             <Modal.Title>Editar Cliente</Modal.Title>
           </Modal.Header>

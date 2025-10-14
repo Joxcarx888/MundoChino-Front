@@ -3,16 +3,19 @@ import { useEffect, useMemo, useState } from "react";
 import { useProducts } from "../../shared/hooks/useProduct";
 import { useProviders } from "../../shared/hooks/useProviders";
 import CustomNavbar from "../../components/navbar/Navbar";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+
 import "./Product.css";
 
 const role = (() => {
-    try {
-      const u = localStorage.getItem("user");
-      return u ? JSON.parse(u).role : "USER";
-    } catch {
-      return "USER";
-    }
-  })();
+  try {
+    const u = localStorage.getItem("user");
+    return u ? JSON.parse(u).role : "USER";
+  } catch {
+    return "USER";
+  }
+})();
 
 export const ProductsPage = () => {
   const { products, addProduct, editProduct, removeProduct } = useProducts();
@@ -68,89 +71,89 @@ export const ProductsPage = () => {
   };
 
   // Auto-cálculos
-    useEffect(() => {
-  const cantidad = Number(formData.cantidad) || 0;
-  const costo = Number(formData.costoUnitario) || 0;
-  const ganancia = Number(formData.porcentajeGanancia) || 0; // en %
-
-  const valorInventario = cantidad * costo;
-
-  const valorConIvaSugerido =
-    costo > 0
-      ? costo * (1 + ganancia / 100) * (1 + 0.12)
-      : 0;
-
-  setFormData((prev) => ({
-    ...prev,
-    valorInventario,
-    valorConIvaSugerido,
-  }));
-}, [formData.cantidad, formData.costoUnitario, formData.porcentajeGanancia]);
-
-
-
-
-const handleOpenModal = (product = null) => {
-  setEditingProduct(product);
-
-  if (product) {
-    // extraer cantidad del paquete si el producto tiene "PAQUETE de X Unidades"
-    let paqueteCantidad = "";
-    let unidad = "UNIDAD";
-    if (typeof product.unidad === "string") {
-      const match = product.unidad.match(/PAQUETE de (\d+)/);
-      if (match) {
-        paqueteCantidad = match[1];
-        unidad = "PAQUETE";
-      }
-    }
-
-    const cantidad = Number(product.cantidad ?? 0);
-    const costo = Number(product.costoUnitario ?? 0);
-    const valorConIva = Number(product.valorConIvaSugerido ?? 0);
-
-    // Despejar % ganancia
-    const porcentajeGuardado =
-      costo > 0 ? Math.round(((valorConIva / (costo * 1.12)) - 1) * 100) : 0;
+  useEffect(() => {
+    const cantidad = Number(formData.cantidad) || 0;
+    const costo = Number(formData.costoUnitario) || 0;
+    const ganancia = Number(formData.porcentajeGanancia) || 0; // en %
 
     const valorInventario = cantidad * costo;
 
-    setFormData({
-      sku: product.sku || "",
-      nombreArticulo: product.nombreArticulo || "",
-      descripcion: product.descripcion || "",
-      proveedor: product.proveedor?._id || product.proveedor || "",
-      unidad,
-      cantidad,
-      costoUnitario: costo,
-      valorInventario,
-      valorConIvaSugerido: valorConIva, // usar el valor que ya está guardado
-      valorReal: Number(product.valorReal ?? 0),
-      porcentajeGanancia: porcentajeGuardado, // este es solo para mostrar en el input
-      paqueteCantidad,
-      imagenes: [],
-    });
-  } else {
-    // Limpiar formulario para agregar nuevo producto
-    setFormData({
-      sku: "",
-      nombreArticulo: "",
-      descripcion: "",
-      proveedor: "",
-      unidad: "UNIDAD",
-      cantidad: 0,
-      costoUnitario: 0,
-      valorInventario: 0,
-      valorConIvaSugerido: 0,
-      valorReal: 0,
-      porcentajeGanancia: 0,
-      paqueteCantidad: "",
-      imagenes: [],
-    });
-  }
+    const valorConIvaSugerido =
+      costo > 0
+        ? costo * (1 + ganancia / 100) * (1 + 0.12)
+        : 0;
 
-  setIsModalOpen(true);
-};
+    setFormData((prev) => ({
+      ...prev,
+      valorInventario,
+      valorConIvaSugerido,
+    }));
+  }, [formData.cantidad, formData.costoUnitario, formData.porcentajeGanancia]);
+
+
+
+
+  const handleOpenModal = (product = null) => {
+    setEditingProduct(product);
+
+    if (product) {
+      // extraer cantidad del paquete si el producto tiene "PAQUETE de X Unidades"
+      let paqueteCantidad = "";
+      let unidad = "UNIDAD";
+      if (typeof product.unidad === "string") {
+        const match = product.unidad.match(/PAQUETE de (\d+)/);
+        if (match) {
+          paqueteCantidad = match[1];
+          unidad = "PAQUETE";
+        }
+      }
+
+      const cantidad = Number(product.cantidad ?? 0);
+      const costo = Number(product.costoUnitario ?? 0);
+      const valorConIva = Number(product.valorConIvaSugerido ?? 0);
+
+      // Despejar % ganancia
+      const porcentajeGuardado =
+        costo > 0 ? Math.round(((valorConIva / (costo * 1.12)) - 1) * 100) : 0;
+
+      const valorInventario = cantidad * costo;
+
+      setFormData({
+        sku: product.sku || "",
+        nombreArticulo: product.nombreArticulo || "",
+        descripcion: product.descripcion || "",
+        proveedor: product.proveedor?._id || product.proveedor || "",
+        unidad,
+        cantidad,
+        costoUnitario: costo,
+        valorInventario,
+        valorConIvaSugerido: valorConIva, // usar el valor que ya está guardado
+        valorReal: Number(product.valorReal ?? 0),
+        porcentajeGanancia: porcentajeGuardado, // este es solo para mostrar en el input
+        paqueteCantidad,
+        imagenes: [],
+      });
+    } else {
+      // Limpiar formulario para agregar nuevo producto
+      setFormData({
+        sku: "",
+        nombreArticulo: "",
+        descripcion: "",
+        proveedor: "",
+        unidad: "UNIDAD",
+        cantidad: 0,
+        costoUnitario: 0,
+        valorInventario: 0,
+        valorConIvaSugerido: 0,
+        valorReal: 0,
+        porcentajeGanancia: 0,
+        paqueteCantidad: "",
+        imagenes: [],
+      });
+    }
+
+    setIsModalOpen(true);
+  };
 
 
   // Guardar producto
@@ -226,6 +229,31 @@ const handleOpenModal = (product = null) => {
     return filteredProducts.reduce((acc, p) => acc + (Number(p.valorReal) || 0), 0);
   }, [filteredProducts]);
 
+
+const handleExportExcel = () => {
+  // Exportar todos los productos, sin filtrar
+  const dataToExport = products.map((p) => ({
+    SKU: p.sku,
+    Nombre: p.nombreArticulo,
+    Cantidad: p.cantidad,
+    "Valor Real": Number(p.valorReal ?? 0).toFixed(2),
+  }));
+
+  // Crear workbook
+  const wb = XLSX.utils.book_new();
+  const ws = XLSX.utils.json_to_sheet(dataToExport);
+
+  XLSX.utils.book_append_sheet(wb, ws, "Productos");
+
+  // Generar archivo Excel y descargar
+  const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  const blob = new Blob([excelBuffer], {
+    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  });
+  saveAs(blob, "productos.xlsx");
+};
+
+
   return (
     <>
       <CustomNavbar />
@@ -269,10 +297,18 @@ const handleOpenModal = (product = null) => {
           />
 
           {role === "ADMIN" && (
-            <button className="btn-primary" onClick={() => handleOpenModal()}>
-              ➕ Agregar Producto
-            </button>
+            <div className="btn-group">
+              <button className="btn-primary" onClick={() => handleOpenModal()}>
+                ➕ Agregar Producto
+              </button>
+
+              <button className="btn-primary" onClick={handleExportExcel}>
+                📊 Crear Excel
+              </button>
+            </div>
           )}
+
+
         </div>
 
         {/* Tabla */}
@@ -285,9 +321,9 @@ const handleOpenModal = (product = null) => {
                 <th>NOMBRE DEL ARTICULO</th>
                 <th>DESCRIPCIÓN</th>
                 <th>NOMBRE DEL PROVEEDOR</th>
-                {role === "ADMIN" &&<th>FECHA DE COMPRA</th>}
-                {role === "ADMIN" &&<th>NO. FACTURA</th>}
-                {role === "ADMIN" &&<th>SERIE DE FACTURA</th>}
+                {role === "ADMIN" && <th>FECHA DE COMPRA</th>}
+                {role === "ADMIN" && <th>NO. FACTURA</th>}
+                {role === "ADMIN" && <th>SERIE DE FACTURA</th>}
                 <th>UNIDAD</th>
                 <th>CANT.</th>
                 {role === "ADMIN" && <th>COSTO UNITARIO</th>}
@@ -321,7 +357,7 @@ const handleOpenModal = (product = null) => {
                   <td data-label="SERIE DE FACTURA"><span>{p.factura?.serieFactura || "—"}</span></td>
                   <td data-label="UNIDAD"><span>{p.unidad}</span></td>
                   <td data-label="CANT."><span>{p.cantidad}</span></td>
-                 {role === "ADMIN" && (
+                  {role === "ADMIN" && (
                     <td data-label="COSTO UNITARIO">
                       <span>{formatCurrency(Number(p.costoUnitario))}</span>
                     </td>
@@ -338,24 +374,24 @@ const handleOpenModal = (product = null) => {
                   )}
                   <td data-label="VALOR REAL"><span>{formatCurrency(Number(p.valorReal))}</span></td>
                   {role === "ADMIN" && (
-                  <td data-label="Acciones" className="actions">
-                    {role === "ADMIN" && (
-                    <button
-                      className="btn-warning"
-                      onClick={() => handleOpenModal(p)}
-                    >
-                      Editar
-                    </button>
-                    )}   
-                    {role === "ADMIN" && (
-                      <button
-                        className="btn-danger"
-                        onClick={() => removeProduct(p._id)}
-                      >
-                        Eliminar
-                      </button>
-                    )}
-                  </td>
+                    <td data-label="Acciones" className="actions">
+                      {role === "ADMIN" && (
+                        <button
+                          className="btn-warning"
+                          onClick={() => handleOpenModal(p)}
+                        >
+                          Editar
+                        </button>
+                      )}
+                      {role === "ADMIN" && (
+                        <button
+                          className="btn-danger"
+                          onClick={() => removeProduct(p._id)}
+                        >
+                          Eliminar
+                        </button>
+                      )}
+                    </td>
                   )}
                 </tr>
               ))}
@@ -374,7 +410,7 @@ const handleOpenModal = (product = null) => {
               <span>Total Valor Inventario: {formatCurrency(totalValorInventario)}</span>
             )}
             <span>Total Valor Real: {formatCurrency(totalValorReal)}</span>
-        </div>
+          </div>
 
         </div>
 

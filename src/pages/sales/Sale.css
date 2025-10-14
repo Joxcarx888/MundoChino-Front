@@ -1,75 +1,87 @@
-/* Estilos solo para la página de ventas */
-.sales-page {
-  font-family: "Poppins", sans-serif;
-  background-color: #f9f9f9;
-  min-height: 100vh;
-  padding: 20px;
+/* ===== Filtros estilo dorado ===== */
+.sales-page input.form-control,
+.sales-page select.form-select {
+  background-color: #f5a202 !important; /* dorado */
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #000 !important;
 }
 
-/* Encabezado */
-.sales-page .sales-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-.sales-page .sales-header h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #333;
-}
-
-/* Tabla de ventas */
-.sales-page .sales-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background: white;
-  border-radius: 10px;
+/* ===== Tabla de ventas estilo card roja ===== */
+.sales-page table.table {
+  background-color: #db7878 !important; /* fondo card roja */
+  color: #000 !important;
+  border-color: rgb(0, 0, 0);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
 }
 
-.sales-page .sales-table th,
-.sales-page .sales-table td {
-  padding: 14px 18px;
-  text-align: left;
-}
-
-.sales-page .sales-table th {
-  background: #222;
-  color: #fff;
+.sales-page table.table th {
+  background-color: #b91010 !important; /* encabezado rojo oscuro */
+  color: #ffffff !important;
+  border-color: rgb(0, 0, 0);
   font-weight: 600;
 }
 
-.sales-page .sales-table tr:nth-child(even) {
-  background: #f5f5f5;
+.sales-page table.table td {
+  background-color: #db7878 !important;
+  font-weight: bold;
 }
 
-/* Botones */
-.sales-page .btn {
-  padding: 8px 14px;
-  border: none;
+.sales-page table.table tr:nth-child(even) td {
+  background-color: #e19191 !important; /* fila par más clara */
+}
+
+/* ===== Modal de ventas ===== */
+.custom-sale-modal {
+  background-color: #ca150e; /* fondo rojo */
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #000;
+}
+
+.custom-sale-modal .modal-header,
+.custom-sale-modal .modal-title {
+  color: #fdbd4f; /* amarillo título */
+  font-weight: bold;
+}
+
+.custom-sale-modal .modal-body input.form-control,
+.custom-sale-modal .modal-body select.form-select {
+  background-color: #fdbd4f !important; /* dorado */
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #000 !important;
+}
+
+.custom-sale-modal .modal-body input[readonly] {
+  background-color: #9b5d16e0 !important;
+  color: #00000094 !important;
+}
+
+.custom-sale-modal .modal-footer .btn-primary {
+  background-color: #10b981; /* verde */
+  color: #fff;
   border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
+  border: none;
+  font-weight: bold;
 }
 
-.sales-page .btn-add {
-  background: #28a745;
-  color: white;
+.custom-sale-modal .modal-footer .btn-primary:hover {
+  background-color: #059669;
+  transform: scale(1.05);
 }
 
-.sales-page .btn-add:hover {
-  background: #1e7e34;
+.custom-sale-modal .modal-footer .btn-secondary {
+  background-color: #4c61d4; /* azul */
+  color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
 }
 
-.sales-page .btn-delete {
-  background: #dc3545;
-  color: white;
-}
-
-.sales-page .btn-delete:hover {
-  background: #a71d2a;
+.custom-sale-modal .modal-footer .btn-secondary:hover {
+  background-color: #6c749e;
 }

@@ -1,75 +1,203 @@
-/* Estilos solo para la página de facturas */
-.invoice-page {
-  font-family: "Poppins", sans-serif;
-  background-color: #f9f9f9;
+/* src/pages/Invoice.css */
+
+/* Contenedor principal */
+.invoices-page {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 20px;
+  color: #000;
+  font-weight: bold;
+  background-color: #ca150e; /* rojo de fondo */
   min-height: 100vh;
   padding: 20px;
 }
 
-/* Encabezado */
-.invoice-page .invoice-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
+/* Header */
+.invoices-page h2 {
+  color: #111827;
+  margin-bottom: 20px;
 }
 
-.invoice-page .invoice-header h1 {
-  font-size: 28px;
-  font-weight: 600;
-  color: #333;
+/* ===== Filtros estilo dorado ===== */
+.invoices-page input.form-control,
+.invoices-page select.form-select {
+  background-color: #f5a202 !important; /* dorado */
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #000 !important;
 }
 
-/* Tabla de facturas */
-.invoice-page .invoice-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0px 3px 6px rgba(0,0,0,0.1);
-}
-
-.invoice-page .invoice-table th,
-.invoice-page .invoice-table td {
-  padding: 14px 18px;
-  text-align: left;
-}
-
-.invoice-page .invoice-table th {
-  background: #222;
-  color: #fff;
-  font-weight: 600;
-}
-
-.invoice-page .invoice-table tr:nth-child(even) {
-  background: #f5f5f5;
-}
-
-/* Botones */
-.invoice-page .btn {
-  padding: 8px 14px;
-  border: none;
+/* ===== Botones ===== */
+.invoices-page .btn {
   border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
+  font-weight: bold;
+  transition: all 0.2s ease;
 }
 
-.invoice-page .btn-add {
-  background: #007bff;
+/* Agregar / Guardar */
+.invoices-page .btn-primary {
+  background-color: #10b981; /* verde productos */
   color: white;
+  border: none;
 }
 
-.invoice-page .btn-add:hover {
-  background: #0056b3;
+.invoices-page .btn-primary:hover {
+  background-color: #059669;
+  transform: scale(1.05);
 }
 
-.invoice-page .btn-delete {
-  background: #dc3545;
+/* Editar */
+.invoices-page .btn-outline-primary {
+  background-color: #f5a202; /* amarillo */
+  color: #000;
+  border: 1px solid #000;
+}
+
+.invoices-page .btn-outline-primary:hover {
+  background-color: #fbbf24;
+  color: #111827;
+  transform: scale(1.05);
+}
+
+/* Eliminar */
+.invoices-page .btn-outline-danger {
+  background-color: #ef4444;
   color: white;
+  border: 1px solid #000;
 }
 
-.invoice-page .btn-delete:hover {
-  background: #a71d2a;
+.invoices-page .btn-outline-danger:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
 }
+
+/* ===== Tabla de facturas estilo card roja ===== */
+.invoices-page table.table {
+  background-color: #db7878 !important; /* color card roja */
+  color: #000 !important;
+  border-color: rgb(0, 0, 0);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.invoices-page table.table th {
+  background-color: #b91010 !important; /* encabezado más oscuro */
+  color: #ffffff !important;
+  border-color: rgb(0, 0, 0);
+  font-weight: 600;
+}
+
+.invoices-page table.table td {
+  background-color: #db7878 !important;
+  font-weight: bold;
+}
+
+.invoices-page table.table tr:nth-child(even) td {
+  background-color: #e19191 !important; /* fila par más clara */
+}
+
+/* ===== Modal ===== */
+.invoices-page .modal-content {
+  background-color: #ca150e; /* rojo fondo */
+  color: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  border: 2px solid #000;
+}
+
+.invoices-page .modal-header,
+.invoices-page .modal-title {
+  color: #fdbd4f; /* amarillo modal */
+  font-weight: bold;
+}
+
+.invoices-page .modal-body input,
+.invoices-page .modal-body select,
+.invoices-page .modal-body .form-control {
+  background-color: #fdbd4f;
+  color: #000;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #000;
+}
+
+.invoices-page .modal-body input.readonly {
+  background-color: #9b5d16e0;
+  color: #00000094;
+}
+
+.invoices-page .modal-footer .btn-secondary {
+  background-color: #4c61d4;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.invoices-page .modal-footer .btn-secondary:hover {
+  background-color: #6c749e;
+}
+
+.invoices-page .modal-footer .btn-primary {
+  background-color: #10b981;
+  color: #fff;
+}
+
+.invoices-page .modal-footer .btn-primary:hover {
+  background-color: #059669;
+}
+
+/* ===== Collapse subtabla productos ===== */
+.invoices-page .collapse div table th {
+  background-color: #f5a202;
+  color: #000;
+  font-weight: bold;
+}
+
+.invoices-page .collapse div table td {
+  background-color: #db7878;
+  font-weight: bold;
+}
+
+.custom-invoice-modal {
+  background-color: #ca150e;
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #000;
+}
+
+.custom-invoice-modal .modal-header,
+.custom-invoice-modal .modal-title {
+  color: #fdbd4f;
+  font-weight: bold;
+}
+
+.custom-invoice-modal .modal-body input.form-control,
+.custom-invoice-modal .modal-body select.form-select {
+  background-color: #fdbd4f !important;
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #000 !important;
+}
+
+.custom-invoice-modal .modal-body input[readonly] {
+  background-color: #9b5d16e0 !important;
+  color: #00000094 !important;
+}
+
+.custom-invoice-modal .modal-footer .btn-primary {
+  background-color: #10b981;
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+}
+
+.custom-invoice-modal .modal-footer .btn-secondary {
+  background-color: #4c61d4;
+  color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+

@@ -285,7 +285,7 @@ export const SalesPage = () => {
         )}
 
         {/* modal */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" backdrop="static" keyboard={false}>
+        <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" backdrop="static" keyboard={false}   contentClassName="custom-sale-modal">
           <Modal.Header closeButton>
             <Modal.Title>{editingSale ? "Editar Venta" : "Agregar Venta"}</Modal.Title>
           </Modal.Header>

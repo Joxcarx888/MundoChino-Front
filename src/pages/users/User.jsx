@@ -269,7 +269,12 @@ export const UsersPage = () => {
         )}
 
         {/* Modal de edición */}
-        <Modal show={editModal} onHide={() => setEditModal(false)}>
+        <Modal
+          show={editModal}
+          onHide={() => setEditModal(false)}
+          contentClassName="user-modal"
+        >
+
           <Modal.Header closeButton>
             <Modal.Title>Editar Usuario</Modal.Title>
           </Modal.Header>

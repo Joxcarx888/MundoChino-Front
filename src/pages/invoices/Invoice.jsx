@@ -143,7 +143,7 @@ export const InvoicesPage = () => {
     });
   }, [invoices, searchNo, searchSerie, searchProveedor, searchProducto, startDate, endDate]);
 
-  
+
 
   return (
     <>
@@ -237,82 +237,83 @@ export const InvoicesPage = () => {
             </thead>
             <tbody>
               {filteredInvoices.map((inv) => (
-  <>
-    <tr key={inv._id}>
-      <td>
-        <Button
-          variant="link"
-          size="sm"
-          onClick={() => setExpanded(expanded === inv._id ? null : inv._id)}
-        >
-          {expanded === inv._id ? "▲" : "▼"}
-        </Button>
-      </td>
-      <td>
-        {(() => {
-            const [year, month, day] = inv.fechaCompra.split("T")[0].split("-");
-            return `${day}/${month}/${year}`;
-        })()}
-        </td>
+                <>
+                  <tr key={inv._id}>
+                    <td>
+                      <Button
+                        variant="link"
+                        size="sm"
+                        onClick={() => setExpanded(expanded === inv._id ? null : inv._id)}
+                      >
+                        {expanded === inv._id ? "▲" : "▼"}
+                      </Button>
+                    </td>
+                    <td>
+                      {(() => {
+                        const [year, month, day] = inv.fechaCompra.split("T")[0].split("-");
+                        return `${day}/${month}/${year}`;
+                      })()}
+                    </td>
 
 
-      <td>{inv.noFactura}</td>
-      <td>{inv.serieFactura}</td>
-      <td>{inv.proveedor?.name}</td>
-      <td>{inv.total}</td>
-      <td>
-        <Button variant="outline-primary" size="sm" onClick={() => handleOpenModal(inv)}>
-          Editar
-        </Button>{" "}
-        {JSON.parse(localStorage.getItem("user"))?.role === "ADMIN" && (
-          <Button variant="outline-danger" size="sm" onClick={() => handleDelete(inv._id)}>
-            Eliminar
-          </Button>
-        )}
-      </td>
-    </tr>
-    <tr>
-      <td colSpan="7" className="p-0">
-        <Collapse in={expanded === inv._id}>
-          <div className="p-3">
-            <Table size="sm" bordered>
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Cantidad</th>
-                  <th>Costo</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
-                {inv.productos.map((p) => (
-                  <tr key={p.producto._id}>
-                    <td>{p.producto.nombreArticulo}</td>
-                    <td>{p.cantidad}</td>
-                    <td>{p.costoUnitario}</td>
-                    <td>{p.subtotal}</td>
+                    <td>{inv.noFactura}</td>
+                    <td>{inv.serieFactura}</td>
+                    <td>{inv.proveedor?.name}</td>
+                    <td>{inv.total}</td>
+                    <td>
+                      <Button variant="outline-primary" size="sm" onClick={() => handleOpenModal(inv)}>
+                        Editar
+                      </Button>{" "}
+                      {JSON.parse(localStorage.getItem("user"))?.role === "ADMIN" && (
+                        <Button variant="outline-danger" size="sm" onClick={() => handleDelete(inv._id)}>
+                          Eliminar
+                        </Button>
+                      )}
+                    </td>
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          </div>
-        </Collapse>
-      </td>
-    </tr>
-  </>
-))}
+                  <tr>
+                    <td colSpan="7" className="p-0">
+                      <Collapse in={expanded === inv._id}>
+                        <div className="p-3">
+                          <Table size="sm" bordered>
+                            <thead>
+                              <tr>
+                                <th>Producto</th>
+                                <th>Cantidad</th>
+                                <th>Costo</th>
+                                <th>Subtotal</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {inv.productos.map((p) => (
+                                <tr key={p.producto._id}>
+                                  <td>{p.producto.nombreArticulo}</td>
+                                  <td>{p.cantidad}</td>
+                                  <td>{p.costoUnitario}</td>
+                                  <td>{p.subtotal}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </Table>
+                        </div>
+                      </Collapse>
+                    </td>
+                  </tr>
+                </>
+              ))}
 
             </tbody>
           </Table>
         )}
 
         {/* modal */}
-        <Modal 
-          show={showModal} 
-          onHide={() => setShowModal(false)} 
+        <Modal
+          show={showModal}
+          onHide={() => setShowModal(false)}
           size="lg"
           backdrop="static"
           keyboard={false}
+          contentClassName="custom-invoice-modal"
         >
           <Modal.Header closeButton>
             <Modal.Title>{editingInvoice ? "Editar Factura" : "Agregar Factura"}</Modal.Title>

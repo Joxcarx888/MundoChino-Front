@@ -66,6 +66,14 @@ body {
   background-color: #f5a202;
 }
 
+/* Contenedor de botones en filtros o header */
+#products-page .btn-group {
+  display: flex;
+  gap: 12px; /* separación entre botones */
+  align-items: center;
+}
+
+
 /* ===== Tabla ===== */
 #products-page .table-wrap {
   overflow-x: auto;

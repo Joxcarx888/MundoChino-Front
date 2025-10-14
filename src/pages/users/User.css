@@ -1,108 +1,184 @@
-/* Encapsulado para esta página */
-.users-page * {
-  box-sizing: border-box;
-  font-family: "Ancizar Sans", sans-serif;
-}
-
-/* Contenedor principal */
+/* ===== Encapsulado para UsersPage ===== */
 .users-page {
-  padding-top: 20px;
+  padding: 20px;
   min-height: 100vh;
-  background-color: #f8f9fa; /* gris suave */
+  background-color: #ca150e; /* mismo rojo que clients/providers */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #000;
+  font-weight: bold;
 }
 
-/* Título */
+/* ===== Título ===== */
 .users-page h2 {
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 2rem;
+  color: #fdbd4f; /* dorado */
+  font-weight: bold;
   margin-bottom: 20px;
-  color: #333;
 }
 
-/* Inputs de agregar usuario */
-.users-page .add-user-row .form-control {
+/* ===== Buscadores ===== */
+.users-page input[type="text"],
+.users-page input[type="email"],
+.users-page input[type="password"],
+.users-page select {
+  padding: 12px 15px;
   border-radius: 6px;
-  border: 1px solid #ced4da;
-  height: 40px;
-  padding: 0 12px;
-  font-size: 14px;
-  margin-bottom: 10px; /* margen entre inputs */
+  border: 1px solid #000;
+  background-color: #f5a202;
+  font-weight: bold;
+  width: 100%;
+  transition: all 0.2s ease;
 }
 
-/* Botón agregar */
+.users-page input:focus,
+.users-page select:focus {
+  outline: none;
+  border-color: #0004ff;
+  background-color: #f5a202;
+}
+
+/* ===== Formulario agregar usuario ===== */
+.users-page .add-user-row .form-control,
+.users-page .add-user-row select {
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid #000;
+  background-color: #fdbd4f;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
 .users-page .add-user-row .btn {
-  border-radius: 6px;
-  font-weight: 600;
-  height: 40px;
-  margin-top: 10px;
-  transition: all 0.2s ease-in-out;
+  background-color: #fdbd4f !important;
+  color: #000 !important;
+  padding: 8px 16px !important;
+  border: 1px solid black !important;
+  border-radius: 8px !important;
+  font-weight: bold !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
 }
 
 .users-page .add-user-row .btn:hover {
-  transform: translateY(-1px);
+  background-color: #f5a202 !important;
+  transform: scale(1.05);
 }
 
-/* Cards de usuarios */
+/* ===== Cards de usuarios ===== */
 .users-page .card {
-  border-radius: 8px;
-  border: 1px solid #dee2e6;
-  transition: all 0.2s ease-in-out;
+  border-radius: 12px;
+  background-color: #db7878; /* card roja */
+  border: 2px solid #000;
+  transition: all 0.2s ease;
+  font-weight: bold;
 }
 
 .users-page .card:hover {
+  background-color: #fefbe0;
   transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
 .users-page .card-title {
-  font-size: 18px;
+  font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 5px;
 }
 
-.users-page .card-text {
-  font-size: 14px;
-  color: #555;
+.users-page .card-details {
+  font-size: 0.9rem;
+  color: #111827;
 }
 
-/* Botones dentro de la card */
+/* ===== Botones dentro de la card ===== */
 .users-page .card .btn {
-  font-size: 13px;
-  padding: 4px 10px;
+  font-size: 0.85rem;
+  padding: 5px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
-/* Modal edición */
-.users-page .modal-content {
-  border-radius: 10px;
-  overflow: hidden;
+.users-page .btn-outline-primary {
+  background-color: #1045b9;
+  color: #000;
+  border: none;
 }
 
-.users-page .modal-header {
-  background-color: #f1f3f5;
-  border-bottom: 1px solid #dee2e6;
+.users-page .btn-outline-primary:hover {
+  background-color: #007ef5;
+  transform: scale(1.05);
 }
 
-.users-page .modal-title {
-  font-weight: 700;
-  font-size: 18px;
+.users-page .btn-outline-danger {
+  background-color: #ef4444;
+  color: white;
+  border: 1px solid #000;
 }
 
-.users-page .modal-body .form-label {
-  font-weight: 500;
-  font-size: 14px;
+.users-page .btn-outline-danger:hover {
+  background-color: #b91c1c;
+  transform: scale(1.05);
 }
 
-.users-page .modal-body .form-control {
-  font-size: 14px;
-  height: 38px;
-  margin-bottom: 10px; /* margen entre campos */
+/* Modal específico para usuarios */
+.user-modal {
+  background-color: #ca150e; /* rojo */
+  border: 2px solid #000;
+  border-radius: 12px;
+  padding: 25px 30px;
 }
 
-/* Responsive */
+.user-modal .modal-header {
+  border-bottom: 1px solid #000;
+}
+
+.user-modal .modal-title {
+  color: #fdbd4f; /* dorado */
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.user-modal .form-label {
+  color: #fff;
+  font-weight: 600;
+}
+
+.user-modal .form-control,
+.user-modal select {
+  background-color: #fdbd4f; /* dorado */
+  border: 1px solid #000;
+  font-weight: bold;
+  color: #000;
+}
+
+.user-modal .btn-secondary {
+  background-color: #000;
+  color: #fff;
+  border: 1px solid #000;
+  font-weight: bold;
+}
+
+.user-modal .btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+.user-modal .btn-primary {
+  background-color: #24b910;
+  color: #000;
+  border: 1px solid #000;
+  font-weight: bold;
+}
+
+.user-modal .btn-primary:hover {
+  background-color: #74b38c;
+}
+
+/* ===== Responsividad ===== */
 @media (max-width: 768px) {
-  .users-page .add-user-row .form-control,
-  .users-page .add-user-row .btn {
-    margin-bottom: 10px !important;
+  .users-page .add-user-row {
+    flex-direction: column;
+    gap: 10px;
   }
 
   .users-page .card .btn {

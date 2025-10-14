@@ -3,12 +3,10 @@
 /* Contenedor principal */
 .invoices-page {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  margin: 20px;
   color: #000;
   font-weight: bold;
   background-color: #ca150e; /* rojo de fondo */
   min-height: 100vh;
-  padding: 20px;
 }
 
 /* Header */

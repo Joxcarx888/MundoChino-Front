@@ -68,6 +68,17 @@ export const UsersPage = () => {
     }
   };
 
+  const currentUser = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem("user"));
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const isSuperAdmin =
+  currentUser?.username === "admin" || currentUser?.email === "admin@gmail.com";
+
   // Abrir modal de edición
   const handleOpenEditModal = (user) => {
     setEditUserData({
@@ -253,13 +264,15 @@ export const UsersPage = () => {
                       >
                         Editar
                       </Button>
-                      <Button
-                        variant="outline-danger"
-                        size="sm"
-                        onClick={() => handleDeleteUser(user.uid)}
-                      >
-                        Eliminar
-                      </Button>
+                      {isSuperAdmin && (
+                        <Button
+                          variant="outline-danger"
+                          size="sm"
+                          onClick={() => handleDeleteUser(user.uid)}
+                        >
+                          Eliminar
+                        </Button>
+                      )}
                     </div>
                   </Card.Body>
                 </Card>
@@ -313,18 +326,20 @@ export const UsersPage = () => {
                   }
                 />
               </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Nueva Contraseña (Opcional)</Form.Label>
-                <Form.Control
-                  type="password"
-                  placeholder="Dejar en blanco si no cambia"
-                  autoComplete="new-password"
-                  value={editUserData.password}
-                  onChange={(e) =>
-                    setEditUserData({ ...editUserData, password: e.target.value })
-                  }
-                />
-              </Form.Group>
+              {isSuperAdmin && (
+                <Form.Group className="mb-3">
+                  <Form.Label>Nueva Contraseña (Opcional)</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Dejar en blanco si no cambia"
+                    autoComplete="new-password"
+                    value={editUserData.password}
+                    onChange={(e) =>
+                      setEditUserData({ ...editUserData, password: e.target.value })
+                    }
+                  />
+                </Form.Group>
+              )}
               <Form.Group className="mb-3">
                 <Form.Label>Rol</Form.Label>
                 <Form.Select

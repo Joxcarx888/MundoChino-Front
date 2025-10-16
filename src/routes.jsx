@@ -40,7 +40,7 @@ const routes = [
     ) 
   },
 
-  { path: "*", element: <Navigate to="/dashboard" /> },
+  { path: "*", element: <Navigate to="/auth" /> },
 ];
 
 export default routes;

@@ -379,19 +379,42 @@ export const InvoicesPage = () => {
               {formInvoice.productos.map((p, idx) => (
                 <Row key={idx} className="mb-2">
                   <Col md={3}>
-                    <Form.Select
-                      value={p.producto}
-                      onChange={(e) => handleProductChange(idx, "producto", e.target.value)}
-                    >
-                      <option value="">Seleccione producto</option>
+                    <Form.Label>Buscar producto (SKU o nombre)</Form.Label>
+                    <Form.Control
+                      list={`productos-list-${idx}`}
+                      type="text"
+                      placeholder="Escribe el SKU o nombre..."
+                      defaultValue={
+                        products.find((prod) => prod._id === p.producto)?.sku ||
+                        products.find((prod) => prod._id === p.producto)?.nombreArticulo ||
+                        ""
+                      }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const found = products.find(
+                          (prod) =>
+                            prod.sku.toLowerCase() === value.toLowerCase() ||
+                            prod.nombreArticulo.toLowerCase() === value.toLowerCase()
+                        );
+                        if (found) {
+                          handleProductChange(idx, "producto", found._id);
+                          handleProductChange(idx, "costoUnitario", found.costoUnitario);
+                        }
+                      }}
+                    />
+
+                    <datalist id={`productos-list-${idx}`}>
                       {products.map((prod) => (
-                        <option key={prod._id} value={prod._id}>
-                          {prod.nombreArticulo}
-                        </option>
+                        <option
+                          key={prod._id}
+                          value={prod.sku}
+                        >{`${prod.sku} - ${prod.nombreArticulo}`}</option>
                       ))}
-                    </Form.Select>
+                    </datalist>
                   </Col>
+
                   <Col md={2}>
+                    <Form.Label>Cantidad</Form.Label>
                     <Form.Control
                       type="number"
                       value={p.cantidad}
@@ -399,12 +422,10 @@ export const InvoicesPage = () => {
                       min="1"
                     />
                   </Col>
+
                   <Col md={2}>
-                    <Form.Control
-                      type="number"
-                      value={p.valorInventario} // Subtotal calculado
-                      readOnly
-                    />
+                    <Form.Label>Subtotal</Form.Label>
+                    <Form.Control type="number" value={p.valorInventario} readOnly />
                   </Col>
                 </Row>
               ))}

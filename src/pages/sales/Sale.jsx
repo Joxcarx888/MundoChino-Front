@@ -83,6 +83,7 @@ export const SalesPage = () => {
     setFormSale((prev) => ({ ...prev, productos: updated }));
   };
 
+  
   // abrir modal nuevo/editar
   const handleOpenModal = (sale = null) => {
     if (sale) {
@@ -172,6 +173,12 @@ export const SalesPage = () => {
       return matchStart && matchEnd && matchNit;
     });
   }, [sales, searchNit, startDate, endDate]);
+
+  // total de ventas visibles (respeta los filtros)
+const totalFiltrado = useMemo(() => {
+  return filteredSales.reduce((acc, sale) => acc + (Number(sale.totalVenta) || 0), 0);
+}, [filteredSales]);
+
 
   return (
     <>
@@ -281,11 +288,23 @@ export const SalesPage = () => {
                 </tr>
               ))}
             </tbody>
+            {/* Total filtrado */}
+{filteredSales.length > 0 && (
+  <Row className="mt-3">
+    <Col md={{ span: 3, offset: 6 }} className="fw-bold text-end">
+      Total de ventas en este periodo:
+    </Col>
+    <Col md={3}>
+      <Form.Control type="number" value={totalFiltrado} readOnly />
+    </Col>
+  </Row>
+)}
+
           </Table>
         )}
 
         {/* modal */}
-        <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" backdrop="static" keyboard={false}   contentClassName="custom-sale-modal">
+        <Modal show={showModal} onHide={() => setShowModal(false)} size="lg" backdrop="static" keyboard={false} contentClassName="custom-sale-modal">
           <Modal.Header closeButton>
             <Modal.Title>{editingSale ? "Editar Venta" : "Agregar Venta"}</Modal.Title>
           </Modal.Header>
@@ -320,30 +339,28 @@ export const SalesPage = () => {
                   />
 
                   {isRecurrent ? (
-                    <>
-                      <Form.Label>Buscar cliente por NIT</Form.Label>
-                      <div className="d-flex gap-2">
-                        <Form.Control
-                          type="text"
-                          placeholder="Ingrese NIT del cliente"
-                          value={nitSearch}
-                          onChange={(e) => setNitSearch(e.target.value)}
-                        />
-                        {/* botón opcional para forzar búsqueda (no necesario si usas useEffect) */}
-                        <Button variant="outline-secondary" onClick={() => setNitSearch(nitSearch.trim())}>
-                          Buscar
-                        </Button>
-                      </div>
+  <div className="cliente-recurrente-box">
+    <Form.Label>Buscar cliente por NIT</Form.Label>
+    <Form.Control
+      className="nit-search-input"
+      type="text"
+      placeholder="Ingrese NIT del cliente"
+      value={nitSearch}
+      onChange={(e) => setNitSearch(e.target.value)}
+    />
 
-                      {foundClient ? (
-                        <div className="mt-2 p-2 border rounded bg-light">
-                          <strong>Cliente encontrado:</strong> {foundClient.nombre} — NIT: {foundClient.nit}
-                        </div>
-                      ) : nitSearch ? (
-                        <div className="mt-2 text-danger">No se encontró cliente con este NIT</div>
-                      ) : null}
-                    </>
-                  ) : (
+    {foundClient ? (
+      <div className="cliente-encontrado mt-2">
+        ✅ Cliente encontrado: <strong>{foundClient.nombre}</strong> — NIT: {foundClient.nit}
+      </div>
+    ) : nitSearch ? (
+      <div className="cliente-no-encontrado mt-2">
+        ❌ No se encontró cliente con este NIT
+      </div>
+    ) : null}
+  </div>
+) : (
+
                     <>
                       <Form.Label>Nombre del Cliente</Form.Label>
                       <Form.Control
@@ -375,43 +392,70 @@ export const SalesPage = () => {
 
               {/* Filas de productos */}
               {formSale.productos.map((p, idx) => (
-                <Row key={idx} className="mb-2">
-                  <Col md={3}>
-                    <Form.Select
-                      value={p.producto}
-                      onChange={(e) => handleProductChange(idx, "producto", e.target.value)}
-                    >
-                      <option value="">Seleccione producto</option>
-                      {products.map((prod) => (
-                        <option key={prod._id} value={prod._id}>
-                          {prod.nombreArticulo} (Stock: {prod.cantidad})
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Col>
-                  <Col md={2}>
-                    <Form.Control
-                      type="number"
-                      value={p.cantidad}
-                      onChange={(e) => handleProductChange(idx, "cantidad", e.target.value)}
-                      min="1"
-                      max={products.find((prod) => prod._id === p.producto)?.cantidad || undefined}
-                    />
-                  </Col>
-                  <Col md={2}>
-                    <Form.Control
-                      type="number"
-                      value={p.descuento || 0}
-                      onChange={(e) => handleProductChange(idx, "descuento", e.target.value)}
-                      min="0"
-                      max="100"
-                    />
-                  </Col>
-                  <Col md={2}>
-                    <Form.Control type="number" value={p.subtotal} readOnly />
-                  </Col>
-                </Row>
-              ))}
+  <Row key={idx} className="mb-2">
+    <Col md={3}>
+      <Form.Label>Buscar producto (SKU o nombre)</Form.Label>
+      <Form.Control
+        list={`productos-list-${idx}`}
+        type="text"
+        placeholder="Escribe el SKU o nombre..."
+        defaultValue={
+          products.find((prod) => prod._id === p.producto)?.sku ||
+          products.find((prod) => prod._id === p.producto)?.nombreArticulo ||
+          ""
+        }
+        onChange={(e) => {
+          const value = e.target.value;
+          const found = products.find(
+            (prod) =>
+              prod.sku.toLowerCase() === value.toLowerCase() ||
+              prod.nombreArticulo.toLowerCase() === value.toLowerCase()
+          );
+          if (found) {
+            handleProductChange(idx, "producto", found._id);
+            handleProductChange(idx, "cantidad", 1);
+          }
+        }}
+      />
+      <datalist id={`productos-list-${idx}`}>
+        {products.map((prod) => (
+          <option
+            key={prod._id}
+            value={prod.sku}
+          >{`${prod.sku} - ${prod.nombreArticulo} (Stock: ${prod.cantidad})`}</option>
+        ))}
+      </datalist>
+    </Col>
+
+    <Col md={2}>
+      <Form.Label>Cantidad</Form.Label>
+      <Form.Control
+        type="number"
+        value={p.cantidad}
+        onChange={(e) => handleProductChange(idx, "cantidad", e.target.value)}
+        min="1"
+        max={products.find((prod) => prod._id === p.producto)?.cantidad || undefined}
+      />
+    </Col>
+
+    <Col md={2}>
+      <Form.Label>Descuento (%)</Form.Label>
+      <Form.Control
+        type="number"
+        value={p.descuento || 0}
+        onChange={(e) => handleProductChange(idx, "descuento", e.target.value)}
+        min="0"
+        max="100"
+      />
+    </Col>
+
+    <Col md={2}>
+      <Form.Label>Subtotal</Form.Label>
+      <Form.Control type="number" value={p.subtotal} readOnly />
+    </Col>
+  </Row>
+))}
+
 
               {/* Total general */}
               <Row className="mt-3">

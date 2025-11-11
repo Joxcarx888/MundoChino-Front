@@ -33,6 +33,7 @@ export const ProductsPage = () => {
 
   // Filtros
   const [filters, setFilters] = useState({
+    sku: "",
     proveedor: "",
     nombre: "",
     serie: "",
@@ -63,12 +64,13 @@ export const ProductsPage = () => {
       ? n.toLocaleString("es-GT", { style: "currency", currency: "GTQ" })
       : "—";
 
-  const formatDate = (iso) => {
-    if (!iso) return "—";
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return "—";
-    return d.toLocaleDateString("es-GT");
-  };
+const formatDate = (iso) => {
+  if (!iso) return "—";
+  const d = new Date(iso);
+  return `${d.getUTCDate().toString().padStart(2, "0")}/${(d.getUTCMonth()+1)
+    .toString().padStart(2, "0")}/${d.getUTCFullYear()}`;
+};
+
 
   // Auto-cálculos
   useEffect(() => {
@@ -202,23 +204,26 @@ export const ProductsPage = () => {
     setIsModalOpen(false);
   };
 
-  // Filtrado en memoria
-  const filteredProducts = useMemo(() => {
-    return products.filter((p) => {
-      const okProv =
-        !filters.proveedor || p.proveedor?._id === filters.proveedor;
-      const okNombre =
-        !filters.nombre ||
-        (p.nombreArticulo || "")
-          .toLowerCase()
-          .includes(filters.nombre.toLowerCase());
-      const okSerie =
-        !filters.serie ||
-        (p.factura?.serieFactura || "").includes(filters.serie);
+const filteredProducts = useMemo(() => {
+  return products.filter((p) => {
+    const okProv =
+      !filters.proveedor || p.proveedor?._id === filters.proveedor;
+    const okSku =
+      !filters.sku ||
+      (p.sku || "").toLowerCase().includes(filters.sku.toLowerCase());
+    const okNombre =
+      !filters.nombre ||
+      (p.nombreArticulo || "")
+        .toLowerCase()
+        .includes(filters.nombre.toLowerCase());
+    const okSerie =
+      !filters.serie ||
+      (p.factura?.serieFactura || "").includes(filters.serie);
 
-      return okProv && okNombre && okSerie;
-    });
-  }, [products, filters]);
+    return okProv && okSku && okNombre && okSerie;
+  });
+}, [products, filters]);
+
 
   // Totales
   const totalValorInventario = useMemo(() => {
@@ -278,6 +283,14 @@ const handleExportExcel = () => {
             ))}
           </select>
 
+            <input
+    type="text"
+    placeholder="Buscar por SKU..."
+    value={filters.sku}
+    onChange={(e) =>
+      setFilters((f) => ({ ...f, sku: e.target.value }))
+    }
+  />
           <input
             type="text"
             placeholder="Buscar por nombre..."

@@ -85,3 +85,91 @@
 .custom-sale-modal .modal-footer .btn-secondary:hover {
   background-color: #6c749e;
 }
+
+/* ===== Filtros estilo dorado ===== */
+.sales-page input.form-control,
+.sales-page select.form-select {
+  background-color: #f5a202 !important; /* dorado */
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #000 !important;
+}
+
+/* ===== Tabla de ventas estilo card roja ===== */
+.sales-page table.table {
+  background-color: #db7878 !important; /* fondo card roja */
+  color: #000 !important;
+  border-color: rgb(0, 0, 0);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sales-page table.table th {
+  background-color: #b91010 !important; /* encabezado rojo oscuro */
+  color: #ffffff !important;
+  border-color: rgb(0, 0, 0);
+  font-weight: 600;
+}
+
+.sales-page table.table td {
+  background-color: #db7878 !important;
+  font-weight: bold;
+}
+
+.sales-page table.table tr:nth-child(even) td {
+  background-color: #e19191 !important; /* fila par más clara */
+}
+
+/* ===== Modal de ventas ===== */
+.custom-sale-modal {
+  background-color: #ca150e; /* fondo rojo */
+  color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid #000;
+}
+
+.custom-sale-modal .modal-header,
+.custom-sale-modal .modal-title {
+  color: #fdbd4f; /* amarillo título */
+  font-weight: bold;
+}
+
+.custom-sale-modal .modal-body input.form-control,
+.custom-sale-modal .modal-body select.form-select {
+  background-color: #fdbd4f !important; /* dorado */
+  color: #000 !important;
+  font-weight: bold;
+  border-radius: 6px;
+  border: 1px solid #000 !important;
+}
+
+.custom-sale-modal .modal-body input[readonly] {
+  background-color: #9b5d16e0 !important;
+  color: #00000094 !important;
+}
+
+.custom-sale-modal .modal-footer .btn-primary {
+  background-color: #10b981; /* verde */
+  color: #fff;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+}
+
+.custom-sale-modal .modal-footer .btn-primary:hover {
+  background-color: #059669;
+  transform: scale(1.05);
+}
+
+.custom-sale-modal .modal-footer .btn-secondary {
+  background-color: #4c61d4; /* azul */
+  color: #fff;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+.custom-sale-modal .modal-footer .btn-secondary:hover {
+  background-color: #6c749e;
+}
